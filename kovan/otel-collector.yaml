@@ -1,0 +1,51 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+        cors:
+          allowed_origins:
+            - "http://localhost:8080"
+            - "http://localhost:*"
+
+processors:
+  batch:
+    timeout: 1s
+    send_batch_size: 1024
+  
+  resource:
+    attributes:
+      - key: service.name
+        value: kovan-backend
+        action: upsert
+
+exporters:
+  # Jaeger exporter (Telescope benzeri UI için)
+  jaeger:
+    endpoint: jaeger:14250
+    tls:
+      insecure: true
+
+  # Prometheus exporter (metrics için)
+  prometheus:
+    endpoint: "0.0.0.0:8888"
+
+  # Debug exporter (development için)
+  logging:
+    loglevel: debug
+
+service:
+  pipelines:
+    # Traces pipeline (Telescope benzeri görüntüleme için)
+    traces:
+      receivers: [otlp]
+      processors: [batch, resource]
+      exporters: [jaeger, logging]
+    
+    # Metrics pipeline
+    metrics:
+      receivers: [otlp]
+      processors: [batch, resource]
+      exporters: [prometheus, logging]

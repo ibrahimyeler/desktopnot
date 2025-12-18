@@ -1,0 +1,1435 @@
+basePath: /api/v1
+definitions:
+  handlers.Admin:
+    properties:
+      email:
+        type: string
+      firstname:
+        type: string
+      id:
+        type: string
+      lastname:
+        type: string
+      permissions:
+        items:
+          type: string
+        type: array
+      role:
+        type: string
+    type: object
+  handlers.AdminLoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  handlers.AdminLoginResponse:
+    properties:
+      admin:
+        $ref: '#/definitions/handlers.Admin'
+      message:
+        type: string
+      success:
+        type: boolean
+      token:
+        type: string
+      token_info:
+        $ref: '#/definitions/handlers.TokenInfo'
+    type: object
+  handlers.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  handlers.LoginResponse:
+    properties:
+      message:
+        type: string
+      success:
+        type: boolean
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/handlers.User'
+    type: object
+  handlers.RegisterRequest:
+    properties:
+      confirm_password:
+        type: string
+      email:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      password:
+        minLength: 6
+        type: string
+    required:
+    - confirm_password
+    - email
+    - firstname
+    - lastname
+    - password
+    type: object
+  handlers.RegisterResponse:
+    properties:
+      message:
+        type: string
+      success:
+        type: boolean
+      user_id:
+        type: string
+    type: object
+  handlers.TokenInfo:
+    properties:
+      expires_at:
+        type: integer
+      expires_in:
+        type: integer
+      issued_at:
+        type: integer
+      refresh_token:
+        type: string
+      type:
+        type: string
+    type: object
+  handlers.User:
+    properties:
+      email:
+        type: string
+      firstname:
+        type: string
+      id:
+        type: string
+      lastname:
+        type: string
+    type: object
+  main.Admin:
+    properties:
+      email:
+        type: string
+      firstname:
+        type: string
+      id:
+        type: string
+      lastname:
+        type: string
+      permissions:
+        items:
+          type: string
+        type: array
+      role:
+        type: string
+    type: object
+  main.AdminLoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  main.AdminLoginResponse:
+    properties:
+      admin:
+        $ref: '#/definitions/main.Admin'
+      message:
+        type: string
+      success:
+        type: boolean
+      token:
+        type: string
+      token_info:
+        $ref: '#/definitions/main.TokenInfo'
+    type: object
+  main.Content:
+    properties:
+      author:
+        type: string
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      status:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  main.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  main.LoginResponse:
+    properties:
+      message:
+        type: string
+      success:
+        type: boolean
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/main.User'
+    type: object
+  main.RegisterRequest:
+    properties:
+      confirm_password:
+        type: string
+      email:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      password:
+        minLength: 6
+        type: string
+    required:
+    - confirm_password
+    - email
+    - firstname
+    - lastname
+    - password
+    type: object
+  main.RegisterResponse:
+    properties:
+      message:
+        type: string
+      success:
+        type: boolean
+      user_id:
+        type: string
+    type: object
+  main.TokenInfo:
+    properties:
+      expires_at:
+        type: integer
+      expires_in:
+        type: integer
+      issued_at:
+        type: integer
+      refresh_token:
+        type: string
+      type:
+        type: string
+    type: object
+  main.User:
+    properties:
+      email:
+        type: string
+      firstname:
+        type: string
+      id:
+        type: string
+      lastname:
+        type: string
+    type: object
+  models.Category:
+    properties:
+      color:
+        type: string
+      created_at:
+        type: string
+      description:
+        type: string
+      icon:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      is_featured:
+        type: boolean
+      name:
+        type: string
+      parent_id:
+        type: integer
+      slug:
+        type: string
+      sort_order:
+        type: integer
+      updated_at:
+        type: string
+    required:
+    - name
+    type: object
+  models.CategoryRequest:
+    properties:
+      color:
+        type: string
+      description:
+        type: string
+      icon:
+        type: string
+      is_active:
+        type: boolean
+      is_featured:
+        type: boolean
+      name:
+        type: string
+      parent_id:
+        type: integer
+      sort_order:
+        type: integer
+    required:
+    - name
+    type: object
+  models.CategoryResponse:
+    properties:
+      categories:
+        items:
+          $ref: '#/definitions/models.Category'
+        type: array
+      category:
+        $ref: '#/definitions/models.Category'
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: Pangea UI Backend API with authentication, admin panel, and OAuth integration
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Pangea API
+  version: "1.0"
+paths:
+  /admin/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate admin with email and password
+      parameters:
+      - description: Admin login data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.AdminLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.AdminLoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.AdminLoginResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/main.AdminLoginResponse'
+      summary: Admin login
+      tags:
+      - admin
+  /api/v1/admin/admins:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all admins with pagination
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get all admins (Admin)
+      tags:
+      - admin
+    post:
+      consumes:
+      - application/json
+      description: Create a new admin user
+      parameters:
+      - description: Admin user data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.Admin'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/main.Admin'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create admin (Admin)
+      tags:
+      - admin
+  /api/v1/admin/admins/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete admin by ID
+      parameters:
+      - description: Admin ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete admin (Admin)
+      tags:
+      - admin
+    get:
+      consumes:
+      - application/json
+      description: Get specific admin details by ID
+      parameters:
+      - description: Admin ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get admin by ID (Admin)
+      tags:
+      - admin
+    put:
+      consumes:
+      - application/json
+      description: Update admin information
+      parameters:
+      - description: Admin ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Admin update data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.Admin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Admin'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update admin (Admin)
+      tags:
+      - admin
+  /api/v1/admin/admins/{id}/roles:
+    put:
+      consumes:
+      - application/json
+      description: Update admin's role and permissions
+      parameters:
+      - description: Admin ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Admin role and permission update data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.Admin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Admin'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update admin roles (Admin)
+      tags:
+      - admin
+  /api/v1/admin/content:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all content with pagination
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get all content (Admin)
+      tags:
+      - admin
+    post:
+      consumes:
+      - application/json
+      description: Create a new piece of content
+      parameters:
+      - description: Content data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.Content'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/main.Content'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create content (Admin)
+      tags:
+      - admin
+  /api/v1/admin/content/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete content by ID
+      parameters:
+      - description: Content ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete content (Admin)
+      tags:
+      - admin
+    get:
+      consumes:
+      - application/json
+      description: Get specific content details by ID
+      parameters:
+      - description: Content ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get content by ID (Admin)
+      tags:
+      - admin
+    put:
+      consumes:
+      - application/json
+      description: Update content information
+      parameters:
+      - description: Content ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Content update data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.Content'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Content'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update content (Admin)
+      tags:
+      - admin
+  /api/v1/admin/content/{id}/publish:
+    post:
+      consumes:
+      - application/json
+      description: Publish content
+      parameters:
+      - description: Content ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Publish content (Admin)
+      tags:
+      - admin
+  /api/v1/admin/content/{id}/unpublish:
+    post:
+      consumes:
+      - application/json
+      description: Unpublish content
+      parameters:
+      - description: Content ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Unpublish content (Admin)
+      tags:
+      - admin
+  /api/v1/admin/security/audit:
+    get:
+      consumes:
+      - application/json
+      description: Get audit logs
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get audit logs (Admin)
+      tags:
+      - admin
+  /api/v1/admin/security/logs:
+    get:
+      consumes:
+      - application/json
+      description: Get security logs
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get security logs (Admin)
+      tags:
+      - admin
+  /api/v1/admin/security/sessions:
+    get:
+      consumes:
+      - application/json
+      description: Get list of active sessions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get active sessions (Admin)
+      tags:
+      - admin
+  /api/v1/admin/security/sessions/{id}/terminate:
+    post:
+      consumes:
+      - application/json
+      description: Terminate a specific session by ID
+      parameters:
+      - description: Session ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Terminate session (Admin)
+      tags:
+      - admin
+  /api/v1/admin/users:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all users with pagination
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get all users (Admin)
+      tags:
+      - admin
+    post:
+      consumes:
+      - application/json
+      description: Create a new user
+      parameters:
+      - description: User registration data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/main.RegisterResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.RegisterResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create user (Admin)
+      tags:
+      - admin
+  /api/v1/admin/users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete user (Admin)
+      tags:
+      - admin
+    get:
+      consumes:
+      - application/json
+      description: Get specific user details by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get user by ID (Admin)
+      tags:
+      - admin
+    put:
+      consumes:
+      - application/json
+      description: Update user information
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update user (Admin)
+      tags:
+      - admin
+  /api/v1/admin/users/{id}/activate:
+    post:
+      consumes:
+      - application/json
+      description: Activate user account
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Activate user (Admin)
+      tags:
+      - admin
+  /api/v1/admin/users/{id}/block:
+    post:
+      consumes:
+      - application/json
+      description: Block user account
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Block user (Admin)
+      tags:
+      - admin
+  /api/v1/admin/users/{id}/deactivate:
+    post:
+      consumes:
+      - application/json
+      description: Deactivate user account
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Deactivate user (Admin)
+      tags:
+      - admin
+  /api/v1/admin/users/{id}/unblock:
+    post:
+      consumes:
+      - application/json
+      description: Unblock user account
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Unblock user (Admin)
+      tags:
+      - admin
+  /api/v1/auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout current user and invalidate token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Logout user
+      tags:
+      - auth
+  /api/v1/auth/me:
+    get:
+      consumes:
+      - application/json
+      description: Get current user profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get user profile
+      tags:
+      - user
+  /api/v1/auth/profile:
+    put:
+      consumes:
+      - application/json
+      description: Update current user profile
+      parameters:
+      - description: Profile update data
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update user profile
+      tags:
+      - user
+  /api/v1/auth/refresh:
+    post:
+      consumes:
+      - application/json
+      description: Refresh JWT token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Refresh token
+      tags:
+      - auth
+  /api/v1/categories:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all categories
+      parameters:
+      - description: Filter by active status
+        in: query
+        name: active
+        type: boolean
+      - description: Filter by featured status
+        in: query
+        name: featured
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.CategoryResponse'
+      summary: Get all categories
+      tags:
+      - categories
+    post:
+      consumes:
+      - application/json
+      description: Create a new category
+      parameters:
+      - description: Category data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.CategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.CategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.CategoryResponse'
+      summary: Create new category
+      tags:
+      - categories
+  /api/v1/categories/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a category
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.CategoryResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.CategoryResponse'
+      summary: Delete category
+      tags:
+      - categories
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a specific category by ID
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.CategoryResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.CategoryResponse'
+      summary: Get category by ID
+      tags:
+      - categories
+    put:
+      consumes:
+      - application/json
+      description: Update an existing category
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Category data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.CategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.CategoryResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.CategoryResponse'
+      summary: Update category
+      tags:
+      - categories
+  /api/v1/categories/tree:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve categories in hierarchical structure
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get category tree
+      tags:
+      - categories
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user with email and password
+      parameters:
+      - description: User login data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.LoginResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/main.LoginResponse'
+      summary: Login user
+      tags:
+      - auth
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with email and password
+      parameters:
+      - description: User registration data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.RegisterResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.RegisterResponse'
+      summary: Register a new user
+      tags:
+      - auth
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

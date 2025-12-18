@@ -1,0 +1,293 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* -------------------------------- */
+/* ROOT */
+/* -------------------------------- */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+/* -------------------------------- */
+/* BASE */
+/* -------------------------------- */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Yalnızca yatay taşmayı engelle */
+  max-width: 100vw;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* /q sayfası için body overflow'u sticky'yi bozmasın */
+body:has(main[data-page="search"]) {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* Next.js ana container */
+#__next {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+/* /q sayfası için sticky filtrelerin çalışması için - AGGRESIVE OVERRIDE */
+main[data-page="search"],
+.search-page-main {
+  display: block !important;
+  flex: none !important;
+  overflow: visible !important;
+  position: relative !important;
+  height: auto !important;
+  min-height: auto !important;
+}
+
+/* #__next container'ını override et */
+#__next:has(main[data-page="search"]),
+body:has(main[data-page="search"]) #__next {
+  display: block !important;
+  flex-direction: column !important;
+  overflow: visible !important;
+  height: auto !important;
+  min-height: 100vh !important;
+}
+
+/* Grid container ve parent'ları için */
+main[data-page="search"] > div,
+main[data-page="search"] .grid {
+  overflow: visible !important;
+  position: relative !important;
+}
+
+/* Sticky container için */
+main[data-page="search"] .sticky {
+  position: sticky !important;
+  top: 6rem !important;
+  z-index: 10 !important;
+}
+
+/* Tüm parent chain'i temizle */
+main[data-page="search"] * {
+  overflow-x: visible !important;
+}
+
+main[data-page="search"] .grid > div {
+  overflow: visible !important;
+}
+
+/* -------------------------------- */
+/* FOOTER */
+/* -------------------------------- */
+footer {
+  margin-bottom: 0 !important;
+}
+
+/* -------------------------------- */
+/* CLARITY FIX */
+/* -------------------------------- */
+@supports selector([data-clarity-region="ignore"]) {
+  [data-clarity-region="ignore"] svg,
+  [data-clarity-region="ignore"] path {
+    transform: none !important;
+    scale: 1 !important;
+  }
+}
+
+body[data-clarity-recording] svg,
+body[data-clarity-recording] path {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  width: auto !important;
+  height: auto !important;
+  overflow: visible !important;
+  flex-shrink: 0 !important;
+}
+
+/* -------------------------------- */
+/* HELPERS */
+/* -------------------------------- */
+.text-shadow-lg {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Scrollbar hide */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Custom scrollbar for size selection */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Sticky header utility */
+.sticky-header {
+  position: sticky;
+  top: 0;
+}
+
+/* Hide scrollbar utility */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Header top padding */
+.header-padding {
+  padding-top: 3rem;
+}
+@media (max-width: 768px) {
+  .header-padding {
+    padding-top: 2rem;
+}
+}
+
+/* -------------------------------- */
+/* MOBILE FIXES */
+/* -------------------------------- */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin: 0 !important;
+  }
+  
+  body {
+    padding-bottom: 4rem;
+  }
+  
+  main {
+    padding-bottom: 4rem;
+  }
+
+  * {
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+  
+  /* ❗ NOT: Tüm div ve section'ları manipüle eden
+     sticky'yi bozan kod KALDIRILDI */
+}
+
+/* -------------------------------- */
+/* PRODUCT PAGE SWIPER */
+/* -------------------------------- */
+.product-main-swiper {
+  height: 100% !important;
+}
+
+.product-main-swiper .swiper-wrapper {
+  height: 100% !important;
+  display: flex !important;
+}
+
+.product-main-swiper .swiper-slide {
+  height: 100% !important;
+  width: 100% !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Thumbnails */
+.product-thumbnails-swiper {
+  position: relative;
+}
+
+.product-thumbnails-swiper .swiper-slide {
+  width: auto !important;
+}
+
+.product-thumbnails-swiper .swiper-pagination {
+  bottom: 0;
+}
+
+.product-thumbnails-swiper .swiper-pagination-bullet {
+  background: #d1d5db;
+  opacity: 0.5;
+  width: 8px;
+  height: 8px;
+}
+
+.product-thumbnails-swiper .swiper-pagination-bullet-active {
+  background: #f97316;
+  opacity: 1;
+}
+
+.product-thumbnails-swiper .swiper-button-prev,
+.product-thumbnails-swiper .swiper-button-next {
+  display: none;
+}
+
+/* Hide default navigation */
+.swiper-button-prev,
+.swiper-button-next {
+  display: none !important;
+}
+
+/* Touch optimizations */
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+.active\:scale-95:active {
+  transform: scale(0.95);
+}
+
+.active\:scale-98:active {
+  transform: scale(0.98);
+}
+
+/* Mobile touch improvements */
+@media (max-width: 768px) {
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  input, textarea {
+    font-size: 16px;
+  }
+}

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ödeme İşlemi Başarısız - Trendruum</title>
+    <style>
+        /* CSS yüklenene kadar body'yi gizle - FOUC önleme */
+        body {
+            visibility: hidden;
+            opacity: 0;
+        }
+        body.loaded {
+            visibility: visible;
+            opacity: 1;
+            transition: opacity 0.2s ease-in;
+        }
+        /* Temel stilleri inline olarak ekle - Tailwind yüklenmeden önce görünür olsun */
+        .min-h-screen { min-height: 100vh; }
+        .bg-gray-50 { background-color: #f9fafb; }
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        /* Loading ekranı - CSS yüklenene kadar göster */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f9fafb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        body.loaded #loading-screen {
+            display: none;
+        }
+    </style>
+    <script>
+        // Tailwind CSS'i yükle ve yüklendiğinde body'yi göster
+        (function() {
+            var script = document.createElement('script');
+            script.src = 'https://cdn.tailwindcss.com';
+            script.onload = function() {
+                // Tailwind yüklendikten sonra body'yi göster
+                setTimeout(function() {
+                    document.body.classList.add('loaded');
+                }, 50);
+            };
+            script.onerror = function() {
+                // Hata durumunda da göster
+                document.body.classList.add('loaded');
+            };
+            document.head.appendChild(script);
+        })();
+    </script>
+    <script src="https://unpkg.com/@heroicons/react@2.0.18/24/outline/index.js" type="module"></script>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <!-- Loading Screen - CSS yüklenene kadar göster -->
+    <div id="loading-screen">
+        <div style="text-align: center;">
+            <div style="width: 48px; height: 48px; border: 4px solid #e5e7eb; border-top-color: #f97316; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+        </div>
+    </div>
+    
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center">
+                        <svg width="120" height="42" viewBox="0 0 184 65" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-8 w-auto">
+                            <path d="M108.645 47.4155V50.4336C107.367 50.3665 106.26 50.618 105.323 51.1881C104.386 51.7582 103.909 52.7139 103.909 54.0385V60.5274H100.57V47.6503H103.909V49.8132C104.744 48.2204 106.328 47.4155 108.645 47.4155Z" fill="black"/>
+                            <path d="M147.473 47.6838V54.5583C147.473 55.799 147.166 56.738 146.535 57.3416C145.922 57.9452 145.104 58.247 144.099 58.247C143.094 58.247 142.447 57.9955 141.918 57.4757C141.39 56.956 141.118 56.235 141.118 55.2625V47.667H138.255V55.5308C138.255 57.1739 138.733 58.465 139.67 59.404C140.607 60.3429 141.833 60.8124 143.367 60.8124C144.9 60.8124 146.621 60.1585 147.49 58.8339V60.4771H150.352V47.667H147.49L147.473 47.6838Z" fill="black"/>
+                            <path d="M125.699 47.6838V54.5583C125.699 55.799 125.393 56.738 124.762 57.3416C124.149 57.9452 123.331 58.247 122.326 58.247C121.321 58.247 120.673 57.9955 120.145 57.4757C119.617 56.956 119.344 56.235 119.344 55.2625V47.667H116.482V55.5308C116.482 57.1739 116.959 58.465 117.896 59.404C118.833 60.3429 120.06 60.8124 121.593 60.8124C123.127 60.8124 124.847 60.1585 125.716 58.8339V60.4771H128.578V47.667H125.716L125.699 47.6838Z" fill="black"/>
+                            <path d="M179.553 48.6732C178.582 47.7175 177.287 47.248 175.686 47.248C174.084 47.248 172.313 47.9355 171.358 49.2936C170.49 47.9355 169.161 47.248 167.355 47.248C165.549 47.248 164.22 47.8852 163.317 49.1427V47.5834H160.267V60.5108H163.317V53.2674C163.317 52.144 163.607 51.3057 164.186 50.7188C164.765 50.1488 165.532 49.8469 166.452 49.8469C167.372 49.8469 167.951 50.0985 168.411 50.5847C168.871 51.0709 169.11 51.7752 169.11 52.6638V60.4941H172.159V53.2507C172.159 52.1105 172.432 51.2554 172.994 50.6853C173.556 50.1152 174.306 49.8302 175.243 49.8302C176.18 49.8302 176.759 50.0817 177.253 50.5679C177.747 51.0542 177.986 51.7584 177.986 52.6471V60.4773H181.035V52.4626C181.035 50.853 180.541 49.5787 179.57 48.6397L179.553 48.6732Z" fill="black"/>
+                            <path d="M23.2385 49.8469V47.684H20.5978V60.5108H23.2385V53.7033C23.2385 52.2949 23.6985 51.2889 24.6356 50.6517C25.5726 50.0146 26.68 49.7295 27.9748 49.7798V47.4492C25.6919 47.4492 24.1244 48.2373 23.2556 49.8301L23.2385 49.8469Z" fill="black"/>
+                            <path d="M67.5518 48.7737C66.5636 47.8347 65.2348 47.3652 63.5992 47.3652C61.9636 47.3652 60.0385 48.0862 59.0503 49.5282V47.7006H56.614V60.4268H59.0503V53.6864C59.0503 52.2612 59.4251 51.2049 60.1748 50.5174C60.9244 49.83 61.9125 49.4947 63.1222 49.4947C64.3318 49.4947 65.0644 49.7797 65.6777 50.3498C66.2911 50.9199 66.5977 51.7247 66.5977 52.7642V60.4603H69.034V52.6469C69.034 51.0372 68.5399 49.7629 67.5518 48.8072V48.7737Z" fill="black"/>
+                            <path d="M88.5073 42.5197V49.8637C87.434 48.1702 85.8666 47.3151 83.8051 47.3151C81.7436 47.3151 80.5851 47.969 79.3584 49.2768C78.1318 50.5847 77.5184 52.1775 77.5184 54.0722C77.5184 55.9669 78.1318 57.5598 79.3584 58.8676C80.5851 60.1754 82.0673 60.8294 83.8051 60.8294C85.5429 60.8294 87.434 59.9742 88.5073 58.2808V60.494H90.671V42.5029H88.5073V42.5197ZM87.2466 57.3586C86.3947 58.2472 85.3555 58.6832 84.0947 58.6832C82.834 58.6832 81.8118 58.2472 80.9599 57.3586C80.1081 56.4867 79.6821 55.3801 79.6821 54.089C79.6821 52.7979 80.1081 51.6913 80.9599 50.8194C81.8118 49.9308 82.851 49.4948 84.0947 49.4948C85.3384 49.4948 86.4118 49.9308 87.2466 50.8194C88.0984 51.7081 88.5244 52.7979 88.5244 54.089C88.5244 55.3801 88.0984 56.4867 87.2466 57.3586Z" fill="black"/>
+                            <path d="M45.7274 56.4867C45.5911 56.822 45.4208 57.1406 45.1993 57.4089C44.4496 58.3311 43.3422 58.8005 41.9111 58.8005C40.48 58.8005 39.7133 58.482 38.9126 57.8616C38.4356 57.4927 38.0437 57.0232 37.7711 56.4532C37.4815 55.8663 37.3622 55.1956 37.3622 54.5417V54.1896H47.9593C47.9593 52.3284 47.38 50.7523 46.2045 49.4277C45.0289 48.1031 43.5296 47.4492 41.6896 47.4492C39.8496 47.4492 38.163 48.0864 36.9363 49.3607C35.7096 50.635 35.0963 52.2446 35.0963 54.1561C35.0963 56.0675 35.7267 57.7107 36.9704 58.9682C38.2141 60.2425 39.8326 60.8797 41.8259 60.8797C43.8193 60.8797 46.1363 59.9239 47.363 57.9957C47.9082 57.258 47.9422 56.4028 47.9422 56.4028H45.7274C45.7274 56.4196 45.7104 56.4531 45.6934 56.4699L45.7274 56.4867ZM38.7933 50.5511C39.56 49.8804 40.5311 49.5451 41.7067 49.5451C42.8822 49.5451 43.5978 49.8637 44.3474 50.4841C44.9608 50.9871 45.3867 51.6913 45.6252 52.58H37.5156C37.7541 51.7584 38.18 51.0709 38.7933 50.5344V50.5511Z" fill="black"/>
+                            <path d="M8.38219 49.4779V56.671C8.38219 57.3249 8.51848 57.7943 8.80811 58.0626C9.0807 58.3309 9.52367 58.4818 10.1029 58.4818C10.6822 58.4818 11.3977 58.4818 12.2496 58.4315V60.5106C10.0518 60.7789 8.4333 60.6112 7.39404 60.0244C6.37182 59.4375 5.8607 58.3141 5.8607 56.6542V49.4611H2.98145V47.2311H5.8607V43.5088H8.38219V47.2311H12.2496V49.4611H8.38219V49.4779Z" fill="black"/>
+                            <path d="M130.861 17.2687C130.861 24.8307 124.643 30.9506 116.959 30.9506C109.276 30.9506 103.057 24.8307 103.057 17.2687C103.057 9.70674 109.276 3.60352 116.959 3.60352C124.643 3.60352 130.861 9.72351 130.861 17.2687Z" fill="#EC6D04"/>
+                            <path d="M84.3844 17.2687C84.3844 24.8307 78.1659 30.9506 70.4822 30.9506C62.7985 30.9506 56.58 24.8307 56.58 17.2687C56.58 9.70674 62.7985 3.60352 70.4822 3.60352C78.1659 3.60352 84.3844 9.72351 84.3844 17.2687Z" fill="#F9AF02"/>
+                            <path d="M108.219 17.2687C108.219 24.8307 102.001 30.9506 94.317 30.9506C86.6333 30.9506 80.4148 24.8307 80.4148 17.2687C80.4148 9.70674 86.6333 3.60352 94.317 3.60352C102.001 3.60352 108.219 9.72351 108.219 17.2687Z" fill="black"/>
+                        </svg>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/sepet" class="text-gray-600 hover:text-gray-900">Sepetim</a>
+                    <a href="/hesabim" class="text-gray-600 hover:text-gray-900">Hesabım</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 py-8 sm:py-12 lg:py-16 xl:py-20">
+        <div class="max-w-4xl mx-auto bg-white rounded-2xl border-2 border-gray-200 p-6 sm:p-8 lg:p-10 xl:p-12 text-center">
+            <!-- Hata İkonu -->
+            <div class="flex justify-center mb-6">
+                <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center">
+                    <svg class="w-12 h-12 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Başlık -->
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 lg:mb-8">
+                Ödeme İşlemi Başarısız
+            </h1>
+            
+            <p class="text-base sm:text-lg lg:text-xl xl:text-2xl text-gray-600 mb-6 sm:mb-8 lg:mb-10" id="errorMessage">
+                Ödeme işlemi başarısız oldu. Lütfen tekrar deneyiniz.
+            </p>
+
+
+            <!-- Sipariş Bilgileri -->
+            <div id="orderDetails" class="bg-gray-50 rounded-xl p-6 mb-8 text-left" style="display: none;">
+                <h2 class="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-semibold text-gray-900 mb-3 sm:mb-4 lg:mb-6">Sipariş Bilgileri</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <span class="text-sm font-medium text-gray-500">Sipariş No:</span>
+                        <p class="text-gray-900 font-medium" id="orderId">-</p>
+                    </div>
+                    <div>
+                        <span class="text-sm font-medium text-gray-500">Toplam Tutar:</span>
+                        <p class="text-gray-900 font-medium" id="totalPrice">-</p>
+                    </div>
+                    <div>
+                        <span class="text-sm font-medium text-gray-500">Durum:</span>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                            Ödeme Başarısız
+                        </span>
+                    </div>
+                    <div>
+                        <span class="text-sm font-medium text-gray-500">Tarih:</span>
+                        <p class="text-gray-900" id="orderDate">-</p>
+                    </div>
+                </div>
+
+                <!-- Ürünler -->
+                <div id="orderItems" class="mt-6" style="display: none;">
+                    <h3 class="text-base sm:text-lg lg:text-xl xl:text-2xl font-semibold text-gray-900 mb-2 sm:mb-3 lg:mb-4">Sipariş Edilen Ürünler</h3>
+                    <div class="space-y-3" id="itemsList">
+                        <!-- Ürünler buraya dinamik olarak eklenecek -->
+                    </div>
+                </div>
+
+                <!-- Kargo Bilgileri -->
+                <div id="shippingInfo" class="mt-4 p-4 bg-white rounded-lg border" style="display: none;">
+                    <h3 class="text-base sm:text-lg lg:text-xl xl:text-2xl font-semibold text-gray-900 mb-2 sm:mb-3 lg:mb-4">Kargo Bilgileri</h3>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Kargo Ücreti:</span>
+                            <span class="font-medium text-gray-900" id="shippingCost">-</span>
+                        </div>
+                        <div class="flex justify-between text-sm" id="subtotalRow" style="display: none;">
+                            <span class="text-gray-600">Ürün Toplamı:</span>
+                            <span class="font-medium text-gray-900" id="subtotal">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Butonlar -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/sepet" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-orange-600 hover:bg-orange-700">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                    </svg>
+                    Sepete Dön
+                </a>
+                
+                <a href="/" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                    </svg>
+                    Ana Sayfaya Dön
+                </a>
+            </div>
+
+            <!-- Yardım Kutusu -->
+            <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+                <h3 class="text-sm sm:text-base lg:text-lg font-medium text-blue-900 mb-2">Yardıma mı ihtiyacınız var?</h3>
+                <ul class="text-sm text-blue-800 space-y-1">
+                    <li>• Kart bilgilerinizi kontrol edin</li>
+                    <li>• Kart limitinizin yeterli olduğundan emin olun</li>
+                    <li>• 3D Secure işlemini tamamladığınızdan emin olun</li>
+                    <li>• Sorun devam ederse müşteri hizmetlerimizle iletişime geçin</li>
+                </ul>
+            </div>
+
+            <!-- İletişim Bilgileri -->
+            <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                <h3 class="text-sm sm:text-base lg:text-lg font-medium text-gray-900 mb-2">Müşteri Hizmetleri</h3>
+                <div class="text-sm text-gray-600 space-y-1">
+                    <p>📞 Telefon: 0850 242 11 44</p>
+                    <p>📧 E-posta: destek@trendruum.com</p>
+                    <p>🕒 Çalışma Saatleri: Hafta içi 09:00-18:00</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p>&copy; 2025 Trendruum. Tüm hakları saklıdır.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // URL'den parametreleri al
+        function getUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return {
+                orderId: urlParams.get('merchant_oid'),
+                errorCode: urlParams.get('failed_reason_code'),
+                errorMessage: urlParams.get('failed_reason_msg')
+            };
+        }
+
+        // Hata mesajını ayarla
+        function setErrorMessage() {
+            const params = getUrlParams();
+            const errorMessageElement = document.getElementById('errorMessage');
+            
+            if (params.errorMessage) {
+                errorMessageElement.textContent = decodeURIComponent(params.errorMessage);
+            } else if (params.errorCode) {
+                errorMessageElement.textContent = `Ödeme işlemi başarısız oldu. Hata kodu: ${params.errorCode}`;
+            } else {
+                errorMessageElement.textContent = 'Ödeme işlemi başarısız oldu. Lütfen tekrar deneyiniz.';
+            }
+        }
+
+        // Sipariş detaylarını getir
+        async function fetchOrderDetails(orderId) {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    return;
+                }
+
+                const response = await fetch(`https://api.trendruum.com/api/v1/customer/orders/${orderId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    displayOrderDetails(data.data);
+                }
+            } catch (error) {
+            }
+        }
+
+        // Sipariş detaylarını göster
+        function displayOrderDetails(orderDetails) {
+            const orderDetailsElement = document.getElementById('orderDetails');
+            const orderIdElement = document.getElementById('orderId');
+            const totalPriceElement = document.getElementById('totalPrice');
+            const orderDateElement = document.getElementById('orderDate');
+            const orderItemsElement = document.getElementById('orderItems');
+            const itemsListElement = document.getElementById('itemsList');
+            const shippingInfoElement = document.getElementById('shippingInfo');
+            const shippingCostElement = document.getElementById('shippingCost');
+            const subtotalRowElement = document.getElementById('subtotalRow');
+            const subtotalElement = document.getElementById('subtotal');
+
+            // Sipariş bilgilerini doldur
+            orderIdElement.textContent = orderDetails.id;
+            totalPriceElement.textContent = orderDetails.total_price?.toLocaleString('tr-TR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + ' TL';
+            orderDateElement.textContent = new Date(orderDetails.created_at).toLocaleDateString('tr-TR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            // Ürünleri göster
+            if (orderDetails.order_groups && orderDetails.order_groups[0]?.order_group_items) {
+                const items = orderDetails.order_groups[0].order_group_items;
+                itemsListElement.innerHTML = '';
+                
+                items.forEach((item, index) => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'flex items-center gap-4 p-3 bg-white rounded-lg border';
+                    itemElement.innerHTML = `
+                        <div class="w-16 h-16 bg-gray-200 rounded-lg flex-shrink-0">
+                            ${item.product?.medias?.url ? 
+                                `<img src="${item.product.medias.url}" alt="${item.product.name}" class="w-full h-full object-cover rounded-lg">` : 
+                                ''
+                            }
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-medium text-gray-900">${item.product?.name || 'Ürün adı bulunamadı'}</h4>
+                            <p class="text-sm text-gray-500">
+                                Adet: ${item.quantity} × ${item.price?.toLocaleString('tr-TR')} TL
+                            </p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-medium text-gray-900">
+                                ${(item.price * item.quantity).toLocaleString('tr-TR')} TL
+                            </p>
+                        </div>
+                    `;
+                    itemsListElement.appendChild(itemElement);
+                });
+                
+                orderItemsElement.style.display = 'block';
+            }
+
+            // Kargo bilgilerini göster
+            if (orderDetails.shipping_cost !== undefined) {
+                shippingCostElement.textContent = orderDetails.shipping_cost > 0 
+                    ? `${orderDetails.shipping_cost.toLocaleString('tr-TR')} TL` 
+                    : "Ücretsiz";
+                
+                if (orderDetails.subtotal) {
+                    subtotalElement.textContent = orderDetails.subtotal.toLocaleString('tr-TR') + ' TL';
+                    subtotalRowElement.style.display = 'flex';
+                }
+                
+                shippingInfoElement.style.display = 'block';
+            }
+
+            // Sipariş detaylarını göster
+            orderDetailsElement.style.display = 'block';
+        }
+
+        // Sayfa yüklendiğinde çalıştır
+        document.addEventListener('DOMContentLoaded', function() {
+            setErrorMessage();
+            
+            const params = getUrlParams();
+            if (params.orderId) {
+                fetchOrderDetails(params.orderId);
+            }
+        });
+    </script>
+</body>
+</html>

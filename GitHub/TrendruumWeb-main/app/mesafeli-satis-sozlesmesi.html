@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesafeli Satış Sözleşmesi - Trendruum</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #000000;
+        }
+        .main-title {
+            color: #000000;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #000000;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section-title {
+            color: #000000;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 4px solid #000000;
+        }
+        .subsection-title {
+            color: #000000;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+        }
+        .content {
+            text-align: justify;
+            margin-bottom: 15px;
+            color: #000000;
+        }
+        .highlight {
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #000000;
+            margin: 15px 0;
+            color: #000000;
+        }
+        .list-item {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            color: #000000;
+        }
+        .list-item::before {
+            content: "➢";
+            position: absolute;
+            left: 0;
+            color: #000000;
+            font-weight: bold;
+        }
+        .contact-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .contact-table th,
+        .contact-table td {
+            border: 1px solid #000000;
+            padding: 12px;
+            text-align: left;
+        }
+        .contact-table th {
+            background-color: #000000;
+            color: white;
+            font-weight: bold;
+        }
+        .contact-table tr:nth-child(even) {
+            background-color: #ffffff;
+        }
+        .contact-table td {
+            color: #000000;
+        }
+        .legal-basis {
+            background-color: #ffffff;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #000000;
+            margin: 10px 0;
+            font-style: italic;
+            color: #000000;
+        }
+        .update-date {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #000000;
+            color: #000000;
+            font-weight: bold;
+        }
+        .parties-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #000000;
+        }
+        .party-info {
+            margin-bottom: 20px;
+        }
+        .party-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #000000;
+        }
+        .info-row {
+            display: flex;
+            margin-bottom: 8px;
+        }
+        .info-label {
+            font-weight: bold;
+            min-width: 200px;
+            color: #000000;
+        }
+        .info-value {
+            color: #000000;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                background-color: #ffffff;
+            }
+            .main-title {
+                font-size: 24px;
+                color: #000000;
+            }
+            .section-title {
+                font-size: 16px;
+                color: #000000;
+            }
+            .subsection-title {
+                font-size: 15px;
+                color: #000000;
+            }
+            .info-row {
+                flex-direction: column;
+            }
+            .info-label {
+                min-width: auto;
+                margin-bottom: 5px;
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            body {
+                padding: 60px;
+            }
+            .main-title {
+                font-size: 32px;
+                color: #000000;
+            }
+        }
+    </style>
+</head>
+<body>
+        <div class="header">
+            <h1 class="main-title">MESAFELİ SATIŞ SÖZLEŞMESİ</h1>
+            <h2 class="subtitle">TRENDRUUM PLATFORMU MESAFELİ SATIŞ SÖZLEŞMESİ</h2>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">1. 📋 TARAFLAR</h3>
+            
+            <div class="parties-section">
+                <div class="party-info">
+                    <div class="party-title">🏢 SATICI</div>
+                    <div class="info-row">
+                        <span class="info-label">Satıcı İsim/Unvanı:</span>
+                        <span class="info-value">Sipariş sırasında belirtilecek</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Satıcı'nın Açık Adresi:</span>
+                        <span class="info-value">Sipariş sırasında belirtilecek</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Satıcı'nın Telefonu:</span>
+                        <span class="info-value">Sipariş sırasında belirtilecek</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Satıcı Mersis/Vergi No:</span>
+                        <span class="info-value">Sipariş sırasında belirtilecek</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Satıcı E-Posta Adresi:</span>
+                        <span class="info-value">Sipariş sırasında belirtilecek</span>
+                    </div>
+                </div>
+
+                <div class="party-info">
+                    <div class="party-title">🌐 ARACI HİZMET SAĞLAYICI</div>
+                    <div class="info-row">
+                        <span class="info-label">UNVANI:</span>
+                        <span class="info-value">BECEM ELEKTRONİK TİCARET VE BİLİŞİM HİZMETLERİ ANONİM ŞİRKETİ</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">ADRES:</span>
+                        <span class="info-value">BARBAROS HAYRETİN PAŞA MAH. 1992.SOKAK NO:30 K:5 ESENYURT / İSTANBUL</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">VERGİ DAİRESİ:</span>
+                        <span class="info-value">ESENYURT VERGİ DAİRESİ</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">VERGİ NO:</span>
+                        <span class="info-value">1600690111</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">MERSİS:</span>
+                        <span class="info-value">0160069011100016</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Web Sitesi:</span>
+                        <span class="info-value">www.trendruum.com</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">E-Posta:</span>
+                        <span class="info-value">destek@trendruum.com</span>
+                    </div>
+                </div>
+
+                <div class="party-info">
+                    <div class="party-title">👤 ALICI</div>
+                    <div class="info-row">
+                        <span class="info-label">Adı – Soyadı:</span>
+                        <span class="info-value">Sipariş sırasında belirtilecek</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Adresi:</span>
+                        <span class="info-value">Sipariş sırasında belirtilecek</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">E-Posta:</span>
+                        <span class="info-value">Sipariş sırasında belirtilecek</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">2. 📄 SÖZLEŞME'NİN KONUSU VE KAPSAMI</h3>
+            
+            <div class="content">
+                2.1. İşbu Mesafeli Satış Sözleşmesi ("Sözleşme") 6502 Sayılı Tüketicinin Korunması Hakkında Kanun ("Kanun") ve Mesafeli Sözleşmeler Yönetmeliği'ne uygun olarak düzenlenmiştir. İşbu Sözleşme'nin tarafları işbu Sözleşme tahtında Kanun'dan ve Mesafeli Sözleşmeler Yönetmeliği'nden kaynaklanan yükümlülük ve sorumluluklarını bildiklerini ve anladıklarını kabul ve beyan ederler.
+            </div>
+
+            <div class="content">
+                2.2. Becem Elektronik Ticaret ve Bilişim Hizmetleri Anonim Şirketi, işbu Sözleşme'de "Trendruum" olarak anılacaktır. 6563 sayılı Elektronik Ticaretin Düzenlenmesi Hakkında Kanun uyarınca Trendruum "aracı hizmet sağlayıcı"dır.
+            </div>
+
+            <div class="content">
+                2.3. İşbu Sözleşme'nin konusunu; Alıcı'nın, Trendruum'e ait www.trendruum.com alan adlı web sitesinden ("Websitesi" veya "Platform") Satıcı'ya ait mal veya hizmetin satın alınmasına yönelik elektronik olarak sipariş verdiği, Sözleşme'de belirtilen niteliklere sahip mal veya hizmetin satışı ve teslimi ile ilgili olarak Kanun ve Mesafeli Sözleşmeler Yönetmeliği hükümleri gereğince tarafların hak ve yükümlülüklerinin belirlenmesi oluşturur.
+            </div>
+
+            <div class="content">
+                2.4. İşbu Sözleşme'nin akdedilmesi tarafların ayrı ayrı Trendruum ile akdetmiş oldukları Websitesi Üyelik Sözleşmeleri'nin hükümlerinin ifasını engellemeyecektir. Taraflar işbu Sözleşme konusu mal veya hizmetin satışında, Trendruum'un yalnızca aracı hizmet sağlayıcı olduğu hallerde, Trendruum'un herhangi bir şekilde taraf olmadığını ve Sözleşme kapsamında tarafların yükümlülüklerini yerine getirmeleri ile ilgili herhangi bir sorumluluğu ve taahhüdü bulunmadığını kabul ve beyan ederler.
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">3. 🛒 SÖZLEŞME KONUSU MAL VE HİZMETİN TEMEL NİTELİKLERİ VE FİYATI (KDV DAHİL)</h3>
+            
+            <div class="highlight">
+                <strong>📦 Ürün/Hizmet Detayları:</strong><br>
+                Sipariş sırasında belirtilecek ürün özellikleri, birim fiyatı ve satış bedeli bilgileri.
+            </div>
+
+            <div class="subsection-title">💰 Fiyat Bilgileri:</div>
+            <div class="content">
+                <div class="list-item">Kargo hariç toplam ürün bedeli: Sipariş sırasında belirtilecek</div>
+                <div class="list-item">Kargo Ücreti: Sipariş sırasında belirtilecek</div>
+                <div class="list-item">Kargo Dahil Toplam Bedeli: Sipariş sırasında belirtilecek</div>
+                <div class="list-item">Ödeme Şekli ve Planı: Sipariş sırasında belirtilecek</div>
+                <div class="list-item">Alınan Vade Farkı: Sipariş sırasında belirtilecek</div>
+                <div class="list-item">Vade Farkı hesabında kullanılan faiz oranı: Sipariş sırasında belirtilecek</div>
+            </div>
+
+            <div class="subsection-title">📦 Teslim Şartları:</div>
+            <div class="content">
+                <div class="list-item">Sipariş edilen ürünün sevkiyatına Alıcı tarafından mal veya hizmetin sipariş edilmesini takiben 2 iş günü içinde başlanacaktır.</div>
+                <div class="list-item">Siparişe konu ürün/ürünler, sipariş tarihinden itibaren en geç 30 gün içinde teslim edilecektir.</div>
+                <div class="list-item">Teslimat Adresi: Sipariş sırasında belirtilecek</div>
+            </div>
+
+            <div class="highlight">
+                <strong>💳 Ödeme Koruma Sistemi:</strong><br>
+                Trendruum'un ARACI HİZMET SAĞLAYICI OLDUĞU HALLERDE, SÖZ KONUSU ÜRÜN BEDELİ, ÖDEME KORUMA SİSTEMİ KAPSAMINDA SATICI ADINA, TRENDRUUM TARAFINDAN ALICI'DAN TAHSİL EDİLMEKTEDİR. ALICI MALIN/HİZMETİN BEDELİNİ TRENDRUUM'A ÖDEMEKLE, ÜRÜN BEDELİNİ SATICI'YA ÖDEMİŞ SAYILACAKTIR.
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">4. 🚚 MALIN TESLİMİ VE TESLİM ŞEKLİ</h3>
+            
+            <div class="content">
+                Sözleşme Alıcı tarafından elektronik ortamda onaylanmakla yürürlüğe girmiş olup, Alıcı'nın Satıcı'dan satın almış olduğu mal veya hizmetin Alıcı'ya teslim edilmesiyle ifa edilmiş olur. Mal, Alıcı'nın sipariş formunda ve işbu Sözleşme'de belirtmiş olduğu adrese ve belirtilen yetkili kişi/kişilere teslim edilecektir.
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">5. 💰 TESLİMAT MASRAFLARI VE İFASI</h3>
+            
+            <div class="content">
+                5.1. Malın teslimat masrafları aksine bir hüküm yoksa Alıcı'ya aittir. Satıcı, Platform'da teslimat ücretinin kendisince karşılanacağını beyan etmişse teslimat masrafları Satıcı'ya ait olacaktır.
+            </div>
+
+            <div class="content">
+                5.2. Malın teslimatı; ödemenin gerçekleşmesinden sonra taahhüt edilen sürede yapılır.
+            </div>
+
+            <div class="content">
+                5.3. Malın teslimine ilişkin Satıcı ile Alıcı'nın diğer yükümlülükleri işbu Sözleşme kapsamında ilgili maddelerde düzenlenmektedir.
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">6. 👤 ALICI'NIN BEYAN VE TAAHHÜTLERİ</h3>
+            
+            <div class="content">
+                6.1. Alıcı, Platform'da yer alan Sözleşme konusu mal veya hizmetin temel nitelikleri, satış fiyatı ve ödeme şekli ile teslimat ve kargo bedeline ilişkin olarak Satıcı tarafından yüklenen ön bilgileri okuyup bilgi sahibi olduğunu ve elektronik ortamda gerekli teyidi verdiğini beyan eder.
+            </div>
+
+            <div class="content">
+                6.2. Alıcılar, tüketici sıfatıyla talep ve şikayetlerini yukarıda yer alan Satıcı iletişim bilgilerini kullanarak ve/veya Platform'da yer alan Hesabım>Ürün Sorularım üzerinden ulaştırabilirler.
+            </div>
+
+            <div class="content">
+                6.3. Alıcı, işbu Sözleşme'yi ve Ön Bilgilendirme Formu'nu elektronik ortamda teyit etmekle, mesafeli sözleşmelerin akdinden önce Satıcı tarafından Alıcı'ya verilmesi gereken adres, siparişi verilen mal veya hizmete ait temel özellikler, mal veya hizmetin vergiler dahil fiyatı, ödeme ve teslimat ile teslimat fiyatı bilgilerini de doğru ve eksiksiz olarak edindiğini teyit etmiş olur.
+            </div>
+
+            <div class="content">
+                6.4. Alıcı, işbu Sözleşme'de belirlenen ve Satıcı tarafından belirtilen taşıyıcı dışında başka bir taşıyıcı ile malın gönderilmesini talep etmesi durumunda, malın ilgili taşıyıcıya tesliminden itibaren oluşabilecek kayıp ya da hasardan Satıcı'nın sorumlu olmayacağını bildiğini kabul ve beyan eder.
+            </div>
+
+            <div class="content">
+                6.5. Mal veya hizmetin tesliminden sonra Alıcı'ya ait kredi kartının Alıcı'nın kusurundan kaynaklanmayan bir şekilde yetkisiz kişilerce haksız veya hukuka aykırı olarak kullanılması nedeni ile ilgili banka veya finans kuruluşunun mal veya hizmetin bedelini Trendruum'a/ Satıcı'ya ödememesi halinde, Alıcı kendisine teslim edilmiş olması kaydıyla mal veya hizmeti 3 (üç) gün içinde Satıcı'ya iade etmekle yükümlüdür.
+            </div>
+
+            <div class="content">
+                6.6. Satıcı, Alıcı'nın Platform'dan duyurulan zamanlarda sipariş edebileceği ürün adetlerine kısıt getirebilir. Alıcı'nın Platform'dan yapılan duyurularda belirtilen adedin üzerinde ürün sipariş etmesi halinde siparişler iptal edilebilecek ve yasal süresi içerisinde ürün bedelleri Alıcı'ya iade edilecektir.
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">7. 🏢 SATICI'NIN BEYAN VE TAAHHÜTLERİ</h3>
+            
+            <div class="content">
+                7.1. Satıcı, Sözleşme konusu mal veya hizmetin tüketici mevzuatına uygun olarak, sağlam, eksiksiz, siparişte belirtilen niteliklere uygun ve varsa garanti belgeleri ve kullanım kılavuzları ile Alıcı'ya teslim edilmesinden sorumludur.
+            </div>
+
+            <div class="content">
+                7.2. Satıcı, sipariş konusu mal veya hizmetin ediminin yerine getirilmesinin imkansızlaştığı haller saklı kalmak kaydıyla, mal veya hizmeti, Alıcı'nın isteği veya kişisel ihtiyaçları doğrultusunda hazırlanan mallara ilişkin sözleşmeler haricinde Alıcı tarafından mal veya hizmetin sipariş edilmesinden itibaren 30 (otuz) gün içinde teslim eder.
+            </div>
+
+            <div class="content">
+                7.3. Satıcı, mücbir sebepler veya nakliyeyi engelleyen olağanüstü durumlar nedeni ile sözleşme konusu mal veya hizmeti süresi içinde teslim edemez ise, durumu öğrendiği tarihten itibaren 3 (üç) gün içinde Alıcı'ya yazılı olarak veya kalıcı veri saklayıcısı ile bildirmekle ve varsa teslimat masrafları da dâhil olmak üzere tahsil edilen tüm ödemeleri bildirim tarihinden itibaren en geç 14 (on dört) gün içinde iade etmekle yükümlüdür.
+            </div>
+
+            <div class="content">
+                7.4. Alıcı'nın Sözleşme konusu mal veya hizmetin üçüncü bir kişiye teslimini talep etmesi halinde, teslim edilecek kişinin teslimatı kabul etmemesinden Satıcı sorumlu tutulamaz.
+            </div>
+
+            <div class="content">
+                7.5. Kanun ve Mesafeli Sözleşmeler Yönetmeliği kapsamında satılan mal veya hizmete ilişkin sorumluluk bizzat Satıcı'ya aittir.
+            </div>
+
+            <div class="content">
+                7.6. Satıcı, malın Alıcı ya da Alıcı'nın taşıyıcı dışında belirleyeceği üçüncü bir kişiye teslimine kadar oluşan kayıp ve hasarlardan sorumludur.
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">8. 🌐 TRENDRUUM'UN BEYAN VE TAAHHÜTLERİ</h3>
+            
+            <div class="content">
+                8.1. Trendruum'un işbu Sözleşme konusu mal veya hizmetin doğrudan Alıcı'ya satışını yaptığı hallerde, işbu Sözleşme'de yer alan Satıcı'nın Beyan ve Taahhütleri geçerli olacak olup, Satıcı'ya yapılan tüm atıflar Trendruum'a yapılmış sayılacaktır. Trendruum bu hallerde, işbu Sözleşme'ye Satıcı sıfatıyla taraf ve sorumlu olacaktır.
+            </div>
+
+            <div class="highlight">
+                <strong>⚠️ Aracı Hizmet Sağlayıcı Durumu:</strong><br>
+                Trendruum'un ARACI HİZMET SAĞLAYICI OLDUĞU HALLERDE, TRENDRUUM İŞBU MESAFELİ SATIŞ SÖZLEŞMESİ'NİN TARAFI OLMADIĞINDAN, SÖZLEŞME KAPSAMINDA ALICI VE SATICININ YÜKÜMLÜLÜKLERİNİ YERİNE GETİRMELERİ İLE İLGİLİ, AKSİ MEVZUATTA DÜZENLENEN HALLER HARİÇ OLMAK ÜZERE, HERHANGİ BİR SORUMLULUĞU VE TAAHHÜDÜ BULUNMAMAKTADIR.
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">9. 🔄 CAYMA HAKKI</h3>
+            
+            <div class="highlight">
+                <strong>✅ Cayma Hakkınız:</strong><br>
+                Alıcı, hiçbir gerekçe göstermeksizin, mal satışına ilişkin işlemlerde teslimat tarihinden itibaren, hizmet satışına ilişkin işlemlerde satın alma tarihinden itibaren 14 (on dört) gün içinde cayma hakkını kullanabilir. Alıcı, malın teslimine kadar olan süre içinde de cayma hakkını kullanabilir.
+            </div>
+
+            <div class="subsection-title">⏰ Cayma Süresinin Belirlenmesi:</div>
+            <div class="content">
+                Cayma hakkının süresinin belirlenmesinde başlangıç tarihi olarak şunlar esas alınır:
+                <div class="list-item">Birden fazla parçadan oluşan mallarda, Alıcı'nın veya Alıcı tarafından belirlenen üçüncü kişinin son parçayı teslim aldığı gün</div>
+                <div class="list-item">Tek sipariş konusu olup ayrı ayrı teslim edilen mallarda, Alıcı'nın veya Alıcı tarafından belirlenen üçüncü kişinin son malı teslim aldığı gün</div>
+                <div class="list-item">Belirli bir süre boyunca malın düzenli tesliminin yapıldığı sözleşmelerde, Alıcı'nın veya Alıcı tarafından belirlenen üçüncü kişinin ilk malı teslim aldığı gün</div>
+            </div>
+
+            <div class="subsection-title">📦 İade Koşulları:</div>
+            <div class="content">
+                <div class="list-item">Alıcı'nın cayma hakkını kullandığı tarihten itibaren 10 (on) gün içinde malı geri göndermesi gerekmektedir</div>
+                <div class="list-item">Mal ile beraber faturasının, malın kutusunun, ambalajının, varsa standart aksesuarları, mal ile birlikte hediye edilen diğer ürünlerin de eksiksiz ve hasarsız olarak iade edilmesi gerekmektedir</div>
+                <div class="list-item">Alıcı, cayma süresi içinde malı, işleyişine, teknik özelliklerine ve kullanım talimatlarına uygun bir şekilde mutat kullanım sınırları içinde kalmak suretiyle kullandığı takdirde meydana gelen değişiklik ve bozulmalardan sorumlu değildir</div>
+                <div class="list-item">Alıcı iade edeceği malı Satıcı'ya Ön Bilgilendirme Formu'nda belirtilen Satıcı'nın anlaşmalı kargo şirketi ile gönderdiği sürece, iade kargo bedeli Satıcı'ya aittir</div>
+            </div>
+
+            <div class="highlight">
+                <strong>💳 Ödeme İadesi:</strong><br>
+                Alıcı'nın cayma hakkını kullanmasından itibaren 14 (on dört) gün içinde, Alıcı'nın ilgili mal veya hizmete ilişkin Satıcı'ya veya aracı hizmet sağlayıcı olarak Trendruum'a yaptığı tüm ödemeler Alıcı'nın satın alırken kullandığı ödeme aracına uygun bir şekilde ve tüketiciye herhangi bir masraf veya yükümlülük getirmeden ve tek seferde iade edilecektir.
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">10. ❌ CAYMA HAKKININ KULLANILAMAYACAĞI HALLER</h3>
+            
+            <div class="content">
+                Mevzuat uyarınca Alıcı aşağıdaki hallerde cayma hakkını kullanamaz:
+            </div>
+
+            <div class="content">
+                <div class="list-item">Fiyatı finansal piyasalardaki dalgalanmalara bağlı olarak değişen ve Satıcı'nın kontrolünde olmayan mal veya hizmetlere ilişkin sözleşmeler (örn. ziynet, altın ve gümüş kategorisindeki ürünler)</div>
+                <div class="list-item">Alıcı'nın istekleri veya kişisel ihtiyaçları doğrultusunda hazırlanan mallara ilişkin sözleşmeler</div>
+                <div class="list-item">Çabuk bozulabilen veya son kullanma tarihi geçebilecek malların teslimine ilişkin sözleşmeler</div>
+                <div class="list-item">Tesliminden sonra ambalaj, bant, mühür, paket gibi koruyucu unsurları açılmış olan mallardan; iadesi sağlık ve hijyen açısından uygun olmayanların teslimine ilişkin sözleşmeler</div>
+                <div class="list-item">Tesliminden sonra başka ürünlerle karışan ve doğası gereği ayrıştırılması mümkün olmayan mallara ilişkin sözleşmeler</div>
+                <div class="list-item">Malın tesliminden sonra Alıcı tarafından ambalaj, bant, mühür, paket gibi koruyucu unsurları açılmış olması halinde maddi ortamda sunulan kitap, dijital içerik ve bilgisayar sarf malzemelerine ilişkin sözleşmeler</div>
+                <div class="list-item">Abonelik sözleşmesi kapsamında sağlananlar dışında, gazete ve dergi gibi süreli yayınların teslimine ilişkin sözleşmeler</div>
+                <div class="list-item">Belirli bir tarihte veya dönemde yapılması gereken, konaklama, eşya taşıma, araba kiralama, yiyecek-içecek tedariki ve eğlence veya dinlenme amacıyla yapılan boş zamanın değerlendirilmesine ilişkin sözleşmeler</div>
+                <div class="list-item">Elektronik ortamda anında ifa edilen hizmetler veya Alıcı'ya anında teslim edilen gayrimaddi mallara (hediye kartı, hediye çeki, para yerine geçen kupon ve benzeri) ilişkin sözleşmeler</div>
+                <div class="list-item">Cayma hakkı süresi sona ermeden önce, Alıcı'nın onayı ile ifasına başlanan hizmetlere ilişkin sözleşmeler</div>
+                <div class="list-item">Bahis ve piyangoya ilişkin hizmetlerin ifasına ilişkin sözleşmeler</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">11. ⚖️ UYUŞMAZLIKLARIN ÇÖZÜMÜ</h3>
+            
+            <div class="content">
+                11.1. Kanun ve Mesafeli Sözleşmeler Yönetmeliği kapsamında satılan mal veya hizmete ilişkin sorumluluk bizzat Satıcı'ya aittir. Bununla birlikte Alıcılar, satın aldıkları mal ve hizmetlerle ilgili şikâyetlerini Satıcılar'a doğrudan veya Trendruum'un aracı hizmet sağlayıcı olduğu durumda Trendruum üzerinden iletecektir. Şikayetin Trendruum'a iletilmesi halinde Trendruum sorunun çözülmesi için mümkün olan tüm desteği sağlayacaktır.
+            </div>
+
+            <div class="content">
+                11.2. İşbu Mesafeli Satış Sözleşme ile ilgili çıkacak ihtilaflarda; her yıl Ticaret Bakanlığı tarafından ilan edilen değere kadar Alıcı'nın yerleşim yerindeki ürünü satın aldığı veya ikametgâhının bulunduğu yerdeki İl veya İlçe Tüketici Sorunları Hakem Heyetleri, söz konusu değerin üzerindeki ihtilaflarda ise Tüketici Mahkemeleri yetkilidir.
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">12. 💰 MAL/HİZMETİN FİYATI</h3>
+            
+            <div class="content">
+                Malın peşin veya vadeli satış fiyatı, sipariş formunda yer almakla birlikte, sipariş sonu gönderilen bilgilendirme e-postası ve ürün ile birlikte müşteriye gönderilen fatura içeriğinde mevcut olan fiyattır. Satıcı veya Trendruum tarafından yapılan indirimler, kuponlar, kargo ücreti ve sair uygulamalar satış fiyatına yansıtılır.
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">13. ⚠️ TEMERRÜT HALİ VE HUKUKİ SONUÇLARI</h3>
+            
+            <div class="content">
+                Herhangi bir nedenle Alıcı tarafından mal veya hizmetin bedeli ödenmez veya yapılan ödeme banka kayıtlarında iptal edilir ise, Satıcı mal veya hizmetin teslimi yükümlülüğünden kurtulmuş kabul edilir.
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">14. 📞 BİLDİRİMLER VE DELİL SÖZLEŞMESİ</h3>
+            
+            <div class="content">
+                14.1. İşbu Sözleşme tahtında taraflar arasında yapılacak her türlü yazışma, mevzuatta sayılan zorunlu haller dışında, Platform'da yer alan Hesabım sayfasından veya elektronik posta aracılığıyla yapılacaktır.
+            </div>
+
+            <div class="content">
+                14.2. Alıcı, tüketici sıfatıyla talep ve şikayetlerini yukarıda yer alan Satıcı iletişim bilgilerini kullanarak ve/veya Platform'da yer alan Hesabım sayfası üzerinden, Trendruum Çağrı Merkezi'ni arayarak, yukarıda belirten e-posta adresinden veya Platform'daki canlı destek alanından ulaştırabilir.
+            </div>
+
+            <div class="content">
+                14.3. Alıcı, işbu Sözleşme'den doğabilecek ihtilaflarda Satıcı'nın ve Trendruum'un resmi defter ve ticari kayıtlarıyla, kendi veri tabanında, sunucularında tuttuğu elektronik bilgilerin ve bilgisayar kayıtlarının, bağlayıcı, kesin ve münhasır delil teşkil edeceğini, bu maddenin Hukuk Muhakemeleri Kanunu'nun 193. maddesi anlamında delil sözleşmesi niteliğinde olduğunu kabul, beyan ve taahhüt eder.
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">15. ✅ YÜRÜRLÜK</h3>
+            
+            <div class="content">
+                15 (on beş) maddeden ibaret bu Sözleşme, taraflarca okunarak, işlem tarihinde, Alıcı tarafından elektronik ortamda onaylanmak suretiyle akdedilmiş ve yürürlüğe girmiştir.
+            </div>
+
+            <div class="legal-basis">
+                <strong>Yasal Dayanak:</strong> 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve 
+                Mesafeli Sözleşmeler Yönetmeliği uyarınca hazırlanmıştır.
+            </div>
+        </div>
+
+        <div class="update-date">
+            📅 Güncellenme Tarihi: 15.08.2025
+        </div>
+    <div style="height: 30px;"></div>
+</body>
+</html>

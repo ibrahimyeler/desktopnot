@@ -1,0 +1,209 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Databases
+  auth-db:
+    image: postgres:15-alpine
+    container_name: auth-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: authdb
+    ports:
+      - "5433:5432"
+    volumes:
+      - auth_db_data:/var/lib/postgresql/data
+    networks:
+      - aicoach-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  user-db:
+    image: postgres:15-alpine
+    container_name: user-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: userdb
+    ports:
+      - "5434:5432"
+    volumes:
+      - user_db_data:/var/lib/postgresql/data
+    networks:
+      - aicoach-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  coach-db:
+    image: postgres:15-alpine
+    container_name: coach-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: coachdb
+    ports:
+      - "5435:5432"
+    volumes:
+      - coach_db_data:/var/lib/postgresql/data
+    networks:
+      - aicoach-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - aicoach-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Go Services
+  auth-service:
+    build:
+      context: ./go-services/services/auth-service
+      dockerfile: Dockerfile
+    container_name: auth-service
+    environment:
+      PORT: 8001
+      DATABASE_URL: postgres://postgres:postgres@auth-db:5432/authdb?sslmode=disable
+      JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-in-production}
+    ports:
+      - "8001:8001"
+    depends_on:
+      auth-db:
+        condition: service_healthy
+    networks:
+      - aicoach-network
+    restart: unless-stopped
+
+  user-service:
+    build:
+      context: ./go-services/services/user-service
+      dockerfile: Dockerfile
+    container_name: user-service
+    environment:
+      PORT: 8002
+      DATABASE_URL: postgres://postgres:postgres@user-db:5432/userdb?sslmode=disable
+    ports:
+      - "8002:8002"
+    depends_on:
+      user-db:
+        condition: service_healthy
+    networks:
+      - aicoach-network
+    restart: unless-stopped
+
+  coach-service:
+    build:
+      context: ./go-services/services/coach-service
+      dockerfile: Dockerfile
+    container_name: coach-service
+    environment:
+      PORT: 8003
+      DATABASE_URL: postgres://postgres:postgres@coach-db:5432/coachdb?sslmode=disable
+    ports:
+      - "8003:8003"
+    depends_on:
+      coach-db:
+        condition: service_healthy
+    networks:
+      - aicoach-network
+    restart: unless-stopped
+
+  # FastAPI Services
+  chat-service:
+    build:
+      context: ./fastapi-services/services/chat-service
+      dockerfile: Dockerfile
+    container_name: chat-service
+    environment:
+      AUTH_SERVICE_URL: http://auth-service:8001
+      REDIS_URL: redis://redis:6379
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    ports:
+      - "8100:8100"
+    depends_on:
+      - redis
+      - auth-service
+      - coach-service
+    networks:
+      - aicoach-network
+    restart: unless-stopped
+
+  analytics-service:
+    build:
+      context: ./fastapi-services/services/analytics-service
+      dockerfile: Dockerfile
+    container_name: analytics-service
+    environment:
+      REDIS_URL: redis://redis:6379
+    ports:
+      - "8200:8200"
+    depends_on:
+      - redis
+      - user-service
+      - coach-service
+    networks:
+      - aicoach-network
+    restart: unless-stopped
+
+  community-service:
+    build:
+      context: ./fastapi-services/services/community-service
+      dockerfile: Dockerfile
+    container_name: community-service
+    ports:
+      - "8300:8300"
+    networks:
+      - aicoach-network
+    restart: unless-stopped
+
+  # API Gateway
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-gateway
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - auth-service
+      - user-service
+      - coach-service
+      - chat-service
+      - analytics-service
+      - community-service
+    networks:
+      - aicoach-network
+    restart: unless-stopped
+
+volumes:
+  auth_db_data:
+  user_db_data:
+  coach_db_data:
+  redis_data:
+
+networks:
+  aicoach-network:
+    driver: bridge
+

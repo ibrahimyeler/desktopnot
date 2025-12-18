@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arena Backend Test Client</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .log {
+            background: #f8f8f8;
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        input, select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 5px;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .status.connected {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.disconnected {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Arena Backend Test Client</h1>
+        
+        <div class="section">
+            <h3>🔗 Bağlantı</h3>
+            <div id="connectionStatus" class="status disconnected">
+                Bağlantı yok
+            </div>
+            <input type="text" id="serverUrl" value="ws://localhost:8080/ws" placeholder="WebSocket URL">
+            <button onclick="connect()">Bağlan</button>
+            <button onclick="disconnect()">Bağlantıyı Kes</button>
+        </div>
+
+        <div class="section">
+            <h3>🏠 Oda İşlemleri</h3>
+            <input type="text" id="roomCode" placeholder="Oda Kodu (örn: AB12)">
+            <input type="text" id="nickname" placeholder="Takma Ad" value="TestPlayer">
+            <button onclick="joinRoom()">Odaya Katıl</button>
+            <button onclick="ready()">Hazır</button>
+        </div>
+
+        <div class="section">
+            <h3>🎯 Oyun Kontrolleri</h3>
+            <div>
+                <label>Hareket:</label>
+                <input type="number" id="moveX" value="0" min="-1" max="1" step="0.1" placeholder="X">
+                <input type="number" id="moveY" value="0" min="-1" max="1" step="0.1" placeholder="Y">
+                <button onclick="sendInput()">Hareket Gönder</button>
+            </div>
+            <div>
+                <label>Item:</label>
+                <input type="text" id="itemId" placeholder="Item ID">
+                <button onclick="pickupItem()">Item Al</button>
+                <button onclick="useItem()">Item Kullan</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>📊 Mesaj Logu</h3>
+            <button onclick="clearLog()">Logu Temizle</button>
+            <div id="messageLog" class="log"></div>
+        </div>
+    </div>
+
+    <script>
+        let ws = null;
+        let messageCounter = 0;
+
+        function log(message) {
+            const logDiv = document.getElementById('messageLog');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${timestamp}] ${message}\n`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function updateStatus(connected) {
+            const statusDiv = document.getElementById('connectionStatus');
+            if (connected) {
+                statusDiv.className = 'status connected';
+                statusDiv.textContent = 'Bağlı';
+            } else {
+                statusDiv.className = 'status disconnected';
+                statusDiv.textContent = 'Bağlantı yok';
+            }
+        }
+
+        function connect() {
+            const url = document.getElementById('serverUrl').value;
+            
+            try {
+                ws = new WebSocket(url);
+                
+                ws.onopen = function() {
+                    log('✅ WebSocket bağlantısı açıldı');
+                    updateStatus(true);
+                };
+                
+                ws.onmessage = function(event) {
+                    try {
+                        const message = JSON.parse(event.data);
+                        log(`📨 Gelen: ${JSON.stringify(message, null, 2)}`);
+                    } catch (e) {
+                        log(`📨 Ham mesaj: ${event.data}`);
+                    }
+                };
+                
+                ws.onclose = function() {
+                    log('❌ WebSocket bağlantısı kapandı');
+                    updateStatus(false);
+                    ws = null;
+                };
+                
+                ws.onerror = function(error) {
+                    log(`❌ WebSocket hatası: ${error}`);
+                    updateStatus(false);
+                };
+                
+            } catch (error) {
+                log(`❌ Bağlantı hatası: ${error}`);
+            }
+        }
+
+        function disconnect() {
+            if (ws) {
+                ws.close();
+            }
+        }
+
+        function sendMessage(message) {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                log('❌ WebSocket bağlantısı yok');
+                return;
+            }
+            
+            try {
+                const messageStr = JSON.stringify(message);
+                ws.send(messageStr);
+                log(`📤 Gönderilen: ${messageStr}`);
+            } catch (error) {
+                log(`❌ Mesaj gönderme hatası: ${error}`);
+            }
+        }
+
+        function joinRoom() {
+            const roomCode = document.getElementById('roomCode').value;
+            const nickname = document.getElementById('nickname').value;
+            
+            if (!roomCode || !nickname) {
+                log('❌ Oda kodu ve takma ad gerekli');
+                return;
+            }
+            
+            sendMessage({
+                t: 'JOIN_ROOM',
+                room: roomCode,
+                nickname: nickname
+            });
+        }
+
+        function ready() {
+            sendMessage({
+                t: 'READY'
+            });
+        }
+
+        function sendInput() {
+            const moveX = parseFloat(document.getElementById('moveX').value) || 0;
+            const moveY = parseFloat(document.getElementById('moveY').value) || 0;
+            
+            sendMessage({
+                t: 'INPUT',
+                seq: ++messageCounter,
+                move: [moveX, moveY],
+                aim: [moveX, moveY],
+                act: { use: false }
+            });
+        }
+
+        function pickupItem() {
+            const itemId = document.getElementById('itemId').value;
+            
+            if (!itemId) {
+                log('❌ Item ID gerekli');
+                return;
+            }
+            
+            sendMessage({
+                t: 'PICKUP',
+                itemId: itemId
+            });
+        }
+
+        function useItem() {
+            const moveX = parseFloat(document.getElementById('moveX').value) || 0;
+            const moveY = parseFloat(document.getElementById('moveY').value) || 0;
+            
+            sendMessage({
+                t: 'USE_ITEM',
+                targetDir: [moveX, moveY]
+            });
+        }
+
+        function clearLog() {
+            document.getElementById('messageLog').innerHTML = '';
+        }
+
+        // Sayfa yüklendiğinde log mesajı
+        log('🚀 Test client başlatıldı');
+        log('💡 Kullanım:');
+        log('1. Server URL\'ini ayarlayın');
+        log('2. "Bağlan" butonuna tıklayın');
+        log('3. Oda kodu ve takma ad girin');
+        log('4. "Odaya Katıl" butonuna tıklayın');
+        log('5. Oyun kontrollerini kullanın');
+    </script>
+</body>
+</html>

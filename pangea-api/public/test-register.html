@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register API Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .error {
+            color: #e74c3c;
+            background: #fdf2f2;
+            padding: 0.75rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .success {
+            color: #27ae60;
+            background: #f0f9ff;
+            padding: 0.75rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .response {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            display: none;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .test-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .test-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .test-btn:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Register API Test</h1>
+            <p>Test the register endpoint with different scenarios</p>
+        </div>
+
+        <div class="error" id="error-message"></div>
+        <div class="success" id="success-message"></div>
+
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="firstname">First Name</label>
+                <input type="text" id="firstname" name="firstname" required>
+            </div>
+
+            <div class="form-group">
+                <label for="lastname">Last Name</label>
+                <input type="text" id="lastname" name="lastname" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="submitBtn">
+                Register
+            </button>
+        </form>
+
+        <div class="test-buttons">
+            <button class="test-btn" onclick="fillValidData()">Fill Valid Data</button>
+            <button class="test-btn" onclick="fillInvalidEmail()">Invalid Email</button>
+            <button class="test-btn" onclick="fillShortPassword()">Short Password</button>
+            <button class="test-btn" onclick="fillMismatchPassword()">Password Mismatch</button>
+            <button class="test-btn" onclick="fillMissingFields()">Missing Fields</button>
+        </div>
+
+        <div class="response" id="response"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080';
+
+        // Show message function
+        function showMessage(type, message) {
+            const errorDiv = document.getElementById('error-message');
+            const successDiv = document.getElementById('success-message');
+            
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            
+            if (type === 'error') {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+            } else {
+                successDiv.textContent = message;
+                successDiv.style.display = 'block';
+            }
+        }
+
+        // Show response
+        function showResponse(data) {
+            const responseDiv = document.getElementById('response');
+            responseDiv.textContent = JSON.stringify(data, null, 2);
+            responseDiv.style.display = 'block';
+        }
+
+        // Handle form submission
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.innerHTML;
+            
+            // Show loading state
+            submitBtn.innerHTML = '<span class="loading"></span>Registering...';
+            submitBtn.disabled = true;
+            
+            const formData = {
+                firstname: document.getElementById('firstname').value,
+                lastname: document.getElementById('lastname').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                confirm_password: document.getElementById('confirm_password').value
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+                
+                // Show response
+                showResponse(data);
+                
+                if (data.success) {
+                    showMessage('success', data.message);
+                    document.getElementById('registerForm').reset();
+                } else {
+                    showMessage('error', data.message);
+                }
+            } catch (error) {
+                showMessage('error', 'Network error occurred');
+                showResponse({ error: error.message });
+            } finally {
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Test data functions
+        function fillValidData() {
+            document.getElementById('firstname').value = 'John';
+            document.getElementById('lastname').value = 'Doe';
+            document.getElementById('email').value = 'john.doe@example.com';
+            document.getElementById('password').value = 'password123';
+            document.getElementById('confirm_password').value = 'password123';
+        }
+
+        function fillInvalidEmail() {
+            document.getElementById('firstname').value = 'John';
+            document.getElementById('lastname').value = 'Doe';
+            document.getElementById('email').value = 'invalid-email';
+            document.getElementById('password').value = 'password123';
+            document.getElementById('confirm_password').value = 'password123';
+        }
+
+        function fillShortPassword() {
+            document.getElementById('firstname').value = 'John';
+            document.getElementById('lastname').value = 'Doe';
+            document.getElementById('email').value = 'john.doe@example.com';
+            document.getElementById('password').value = '123';
+            document.getElementById('confirm_password').value = '123';
+        }
+
+        function fillMismatchPassword() {
+            document.getElementById('firstname').value = 'John';
+            document.getElementById('lastname').value = 'Doe';
+            document.getElementById('email').value = 'john.doe@example.com';
+            document.getElementById('password').value = 'password123';
+            document.getElementById('confirm_password').value = 'differentpassword';
+        }
+
+        function fillMissingFields() {
+            document.getElementById('firstname').value = 'John';
+            document.getElementById('lastname').value = '';
+            document.getElementById('email').value = 'john.doe@example.com';
+            document.getElementById('password').value = 'password123';
+            document.getElementById('confirm_password').value = 'password123';
+        }
+
+        // Check API health on load
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                if (data.status === 'ok') {
+                    console.log('API is running');
+                }
+            } catch (error) {
+                showMessage('error', 'API is not running. Please start the server.');
+            }
+        });
+    </script>
+</body>
+</html> 

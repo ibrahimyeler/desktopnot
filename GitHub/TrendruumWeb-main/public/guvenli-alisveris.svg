@@ -1,0 +1,10 @@
+<svg width="60" height="40" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Shield background -->
+  <path d="M30 2L50 8V20C50 28.5 30 38 30 38S10 28.5 10 20V8L30 2Z" fill="#10B981" stroke="#059669" stroke-width="1"/>
+  
+  <!-- Checkmark -->
+  <path d="M22 20L26 24L38 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Text -->
+  <text x="30" y="32" text-anchor="middle" fill="#10B981" font-family="Arial, sans-serif" font-size="6" font-weight="bold">GÜVENLİ</text>
+</svg>

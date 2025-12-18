@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pangea API - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+        }
+
+        .btn-google {
+            background: #db4437;
+            color: white;
+        }
+
+        .btn-google:hover {
+            background: #c23321;
+        }
+
+        .btn-github {
+            background: #333;
+            color: white;
+        }
+
+        .btn-github:hover {
+            background: #24292e;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #ddd;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .oauth-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .oauth-buttons .btn {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .error {
+            color: #e74c3c;
+            background: #fdf2f2;
+            padding: 0.75rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .success {
+            color: #27ae60;
+            background: #f0f9ff;
+            padding: 0.75rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Welcome to Pangea</h1>
+            <p>Sign up or log in to continue</p>
+        </div>
+
+        <div class="error" id="error-message"></div>
+        <div class="success" id="success-message"></div>
+
+        <!-- OAuth Buttons -->
+        <div class="oauth-buttons">
+            <button class="btn btn-google" onclick="initiateGoogleAuth()">
+                Google
+            </button>
+            <button class="btn btn-github" onclick="initiateGithubAuth()">
+                GitHub
+            </button>
+        </div>
+
+        <div class="divider">
+            <span>or</span>
+        </div>
+
+        <!-- Registration Form -->
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="firstname">First Name</label>
+                <input type="text" id="firstname" name="firstname" required>
+            </div>
+
+            <div class="form-group">
+                <label for="lastname">Last Name</label>
+                <input type="text" id="lastname" name="lastname" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080';
+
+        // Show message function
+        function showMessage(type, message) {
+            const errorDiv = document.getElementById('error-message');
+            const successDiv = document.getElementById('success-message');
+            
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            
+            if (type === 'error') {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+            } else {
+                successDiv.textContent = message;
+                successDiv.style.display = 'block';
+            }
+        }
+
+        // Google OAuth
+        async function initiateGoogleAuth() {
+            try {
+                const response = await fetch(`${API_BASE}/auth/google`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    window.location.href = data.auth_url;
+                } else {
+                    showMessage('error', data.message);
+                }
+            } catch (error) {
+                showMessage('error', 'Failed to initiate Google authentication');
+            }
+        }
+
+        // GitHub OAuth
+        async function initiateGithubAuth() {
+            try {
+                const response = await fetch(`${API_BASE}/auth/github`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    window.location.href = data.auth_url;
+                } else {
+                    showMessage('error', data.message);
+                }
+            } catch (error) {
+                showMessage('error', 'Failed to initiate GitHub authentication');
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                firstname: document.getElementById('firstname').value,
+                lastname: document.getElementById('lastname').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                confirm_password: document.getElementById('confirm_password').value
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage('success', data.message);
+                    document.getElementById('registerForm').reset();
+                } else {
+                    showMessage('error', data.message);
+                }
+            } catch (error) {
+                showMessage('error', 'Failed to register user');
+            }
+        });
+
+        // Check for OAuth callback parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const state = urlParams.get('state');
+        
+        if (code && state) {
+            // Handle OAuth callback
+            const currentPath = window.location.pathname;
+            if (currentPath.includes('google')) {
+                handleGoogleCallback(code);
+            } else if (currentPath.includes('github')) {
+                handleGithubCallback(code);
+            }
+        }
+
+        async function handleGoogleCallback(code) {
+            try {
+                const response = await fetch(`${API_BASE}/auth/google/callback?code=${code}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage('success', `Welcome ${data.user.first_name}! Google authentication successful.`);
+                } else {
+                    showMessage('error', data.message);
+                }
+            } catch (error) {
+                showMessage('error', 'Failed to complete Google authentication');
+            }
+        }
+
+        async function handleGithubCallback(code) {
+            try {
+                const response = await fetch(`${API_BASE}/auth/github/callback?code=${code}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage('success', `Welcome ${data.user.first_name}! GitHub authentication successful.`);
+                } else {
+                    showMessage('error', data.message);
+                }
+            } catch (error) {
+                showMessage('error', 'Failed to complete GitHub authentication');
+            }
+        }
+    </script>
+</body>
+</html> 

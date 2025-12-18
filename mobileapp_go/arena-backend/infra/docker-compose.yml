@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: arena-postgres
+    environment:
+      POSTGRES_USER: arena_user
+      POSTGRES_PASSWORD: arena_password
+      POSTGRES_DB: arena_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d
+    networks:
+      - arena-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: arena-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - arena-network
+
+  server:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile
+    container_name: arena-server
+    ports:
+      - "8080:8080"
+    environment:
+      - POSTGRES_HOST=postgres
+      - REDIS_HOST=redis
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - arena-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  arena-network:
+    driver: bridge

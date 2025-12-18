@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ön Bilgilendirme Formu - Trendruum</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #000000;
+        }
+        .main-title {
+            color: #000000;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #000000;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section-title {
+            color: #000000;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 4px solid #000000;
+        }
+        .subsection-title {
+            color: #000000;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+        }
+        .content {
+            text-align: justify;
+            margin-bottom: 15px;
+            color: #000000;
+        }
+        .highlight {
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #000000;
+            margin: 15px 0;
+            color: #000000;
+        }
+        .list-item {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            color: #000000;
+        }
+        .list-item::before {
+            content: "➢";
+            position: absolute;
+            left: 0;
+            color: #000000;
+            font-weight: bold;
+        }
+        .contact-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .contact-table th,
+        .contact-table td {
+            border: 1px solid #000000;
+            padding: 12px;
+            text-align: left;
+        }
+        .contact-table th {
+            background-color: #000000;
+            color: white;
+            font-weight: bold;
+        }
+        .contact-table tr:nth-child(even) {
+            background-color: #ffffff;
+        }
+        .contact-table td {
+            color: #000000;
+        }
+        .legal-basis {
+            background-color: #ffffff;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #000000;
+            margin: 10px 0;
+            font-style: italic;
+            color: #000000;
+        }
+        .update-date {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #000000;
+            color: #000000;
+            font-weight: bold;
+        }
+        .parties-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #000000;
+        }
+        .party-info {
+            margin-bottom: 20px;
+        }
+        .party-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #000000;
+        }
+        .info-row {
+            display: flex;
+            margin-bottom: 8px;
+        }
+        .info-label {
+            font-weight: bold;
+            min-width: 200px;
+            color: #000000;
+        }
+        .info-value {
+            color: #000000;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                background-color: #ffffff;
+            }
+            .main-title {
+                font-size: 24px;
+                color: #000000;
+            }
+            .section-title {
+                font-size: 16px;
+                color: #000000;
+            }
+            .subsection-title {
+                font-size: 15px;
+                color: #000000;
+            }
+            .info-row {
+                flex-direction: column;
+            }
+            .info-label {
+                min-width: auto;
+                margin-bottom: 5px;
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            body {
+                padding: 60px;
+            }
+            .main-title {
+                font-size: 32px;
+                color: #000000;
+            }
+        }
+    </style>
+</head>
+<body>
+        <div class="header">
+            <h1 class="main-title">ÖN BİLGİLENDİRME FORMU</h1>
+            <h2 class="subtitle">TRENDRUUM PLATFORMU ÖN BİLGİLENDİRME FORMU</h2>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">1. 📋 TARAFLAR VE KONU</h3>
+            
+            <div class="content">
+                İşbu Ön Bilgilendirme Formu'nun konusu, Alıcı ve Satıcı arasındaki Sözleşme'ye ilişkin Kanun ve Yönetmelik hükümleri uyarınca bilgilendirilmesidir. Ayrıca Yönetmelik uyarınca yer verilmesi zorunlu olan hususlar Ön Bilgilendirme Formu'nda yer almaktadır.
+            </div>
+
+            <div class="highlight">
+                <strong>📋 Bilgilendirme Takibi:</strong><br>
+                ALICI, Ön Bilgilendirme Formu ve Sözleşme'ye ilişkin bilgileri üyeliğinin bağlı olduğu "Hesabım" sayfasından takip edebilecek olup değişen bilgilerini bu sayfa üstünden güncelleyebilecektir. Ön Bilgilendirme Formu ve Sözleşme'nin bir nüshası Alıcı'nın üyelik hesabında mevcuttur ve talep edilmesi halinde ayrıca elektronik posta ile de gönderilebilecektir.
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">2. 📖 TANIMLAR</h3>
+            
+            <div class="content">
+                Ön Bilgilendirme Formu ve Sözleşme'nin uygulanmasında ve yorumlanmasında aşağıda yazılı terimler karşılarındaki yazılı açıklamaları ifade edeceklerdir.
+            </div>
+
+            <div class="subsection-title">👤 ALICI:</div>
+            <div class="content">
+                Bir Mal veya Hizmet'i ticari veya mesleki olmayan amaçlarla edinen, kullanan veya yararlanan gerçek kişiyi
+            </div>
+
+            <div class="subsection-title">🏛️ Bakanlık:</div>
+            <div class="content">
+                Türkiye Cumhuriyeti Ticaret Bakanlığı'nı
+            </div>
+
+            <div class="subsection-title">🏦 Banka:</div>
+            <div class="content">
+                5411 sayılı Bankacılık Kanunu uyarınca kurulan lisanslı kuruluşları
+            </div>
+
+            <div class="subsection-title">🌐 BECEM veya Elektronik Ticaret Aracı Hizmet Sağlayıcı:</div>
+            <div class="content">
+                Oluşturduğu sistem ile Satıcı'nın Ürün/Hizmet'i satışa sunduğu Platform'u işleten ve Satıcı adına mesafeli sözleşme kurulmasına aracılık eden BECEM ELEKTRONİK TİCARET VE BİLİŞİM HİZMETLERİ ANONİM ŞİRKETİ'ni
+            </div>
+
+            <div class="subsection-title">🛠️ Hizmet:</div>
+            <div class="content">
+                Bir ücret veya menfaat karşılığında yapılan ya da yapılması taahhüt edilen Ürün sağlama dışındaki her türlü tüketici işleminin konusunu
+            </div>
+
+            <div class="subsection-title">⚖️ Kanun:</div>
+            <div class="content">
+                6502 sayılı Tüketicinin Korunması Hakkında Kanun'u
+            </div>
+
+            <div class="subsection-title">📦 Kargo Şirketi:</div>
+            <div class="content">
+                Ürün'ün Alıcı'ya ulaştırılmasını, iade süreçlerinde Alıcı'dan alınarak Satıcı veya BECEM'e ulaştırılmasını sağlayan anlaşmalı kargo veya lojistik şirketini
+            </div>
+
+            <div class="subsection-title">📄 Ön Bilgilendirme Formu:</div>
+            <div class="content">
+                Sözleşme kurulmadan ya da buna karşılık herhangi bir teklif Alıcı tarafından kabul edilmeden önce Alıcı'yı Yönetmelik'te belirtilen asgari hususlar konusunda bilgilendirmek için hazırlanan formu
+            </div>
+
+            <div class="subsection-title">🌐 Platform:</div>
+            <div class="content">
+                BECEM'e ait www.trendruum.com adlı internet sitesini ve mobil uygulamasını
+            </div>
+
+            <div class="subsection-title">🏢 Satıcı:</div>
+            <div class="content">
+                Kamu tüzel kişileri de dahil olmak üzere ticari veya mesleki amaçlarla tüketiciye Ürün/Hizmet sunan ya da Ürün/Hizmet sunanın adına ya da hesabına hareket eden ve aşağıda bilgileri bulunan gerçek ve/veya tüzel kişiyi
+            </div>
+
+            <div class="subsection-title">📋 Sözleşme:</div>
+            <div class="content">
+                Satıcı ve Alıcı arasında akdedilen Sözleşme'yi
+            </div>
+
+            <div class="subsection-title">📍 Teslimat Noktası:</div>
+            <div class="content">
+                Alıcı'nın satın aldığı Ürünler'i kolayca teslim alabildiği anlaşmalı esnaf noktalarını, kargo şubelerini ve zincir mağazalarını
+            </div>
+
+            <div class="subsection-title">🛒 Ürün:</div>
+            <div class="content">
+                Alışverişe konu olan taşınır eşya, konut veya tatil amaçlı taşınmaz mallar ile elektronik ortamda kullanılmak üzere hazırlanan yazılım, ses, görüntü ve benzeri her türlü gayri maddi malı
+            </div>
+
+            <div class="subsection-title">📜 Yönetmelik:</div>
+            <div class="content">
+                Mesafeli Sözleşmeler Yönetmeliği'ni ifade eder
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">3. 👥 ALICI, SATICI VE ELEKTRONİK TİCARET ARACI HİZMET SAĞLAYICI</h3>
+            
+            <div class="parties-section">
+                <div class="party-info">
+                    <div class="party-title">👤 ALICI BİLGİLERİ</div>
+                    <div class="info-row">
+                        <span class="info-label">Teslim Edilecek Kişi:</span>
+                        <span class="info-value">Sipariş sırasında belirtilecek</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Teslimat Adresi:</span>
+                        <span class="info-value">Sipariş sırasında belirtilecek</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Telefon:</span>
+                        <span class="info-value">Sipariş sırasında belirtilecek</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Faks:</span>
+                        <span class="info-value">Sipariş sırasında belirtilecek</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">E-posta/Kullanıcı Adı:</span>
+                        <span class="info-value">Sipariş sırasında belirtilecek</span>
+                    </div>
+                </div>
+
+                <div class="party-info">
+                    <div class="party-title">🏢 SATICI BİLGİLERİ</div>
+                    <div class="info-row">
+                        <span class="info-label">Satıcının Ticaret Unvanı / Adı ve Soyadı:</span>
+                        <span class="info-value">Sipariş sırasında belirtilecek</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Satıcının Adresi:</span>
+                        <span class="info-value">Sipariş sırasında belirtilecek</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Satıcının Mersis Numarası:</span>
+                        <span class="info-value">Sipariş sırasında belirtilecek</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Satıcının Vergi Kimlik Numarası:</span>
+                        <span class="info-value">Sipariş sırasında belirtilecek</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Satıcının Telefonu:</span>
+                        <span class="info-value">Sipariş sırasında belirtilecek</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Satıcının Faks Numarası:</span>
+                        <span class="info-value">Sipariş sırasında belirtilecek</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Satıcı KEP ve E-posta Bilgileri:</span>
+                        <span class="info-value">Sipariş sırasında belirtilecek</span>
+                    </div>
+                </div>
+
+                <div class="party-info">
+                    <div class="party-title">🌐 ELEKTRONİK TİCARET ARACI HİZMET SAĞLAYICI BİLGİLERİ</div>
+                    <div class="info-row">
+                        <span class="info-label">Elektronik Ticaret Aracı Hizmet Sağlayıcı Unvanı:</span>
+                        <span class="info-value">BECEM Grup Danışmanlık İletişim ve Satış Ticaret A.Ş.</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Elektronik Ticaret Aracı Hizmet Sağlayıcı Adresi:</span>
+                        <span class="info-value">BARBAROS HAYRETİN PAŞA MAH. 1992.SOKAK NO:30 K:5 ESENYURT / İSTANBUL</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Elektronik Ticaret Aracı Hizmet Sağlayıcı Mersis Numarası:</span>
+                        <span class="info-value">0160069011100016</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Elektronik Ticaret Aracı Hizmet Sağlayıcı Vergi Kimlik Numarası:</span>
+                        <span class="info-value">ESENYURT VERGİ DAİRESİ :1600690111</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Elektronik Ticaret Aracı Hizmet Sağlayıcı Telefonu:</span>
+                        <span class="info-value">Platform üzerinden ulaşılabilir</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Elektronik Ticaret Aracı Hizmet Sağlayıcı Faks Numarası:</span>
+                        <span class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Elektronik Ticaret Aracı Hizmet Sağlayıcı Şikâyet/Öneri Kanalları:</span>
+                        <span class="info-value">Platform üzerinden ve "trendruum Asistan'a Sor" başlıklı alandan şikayet ve öneriler iletilebilecektir.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">4. 🛒 ÜRÜN/HİZMET BİLGİLERİ</h3>
+            
+            <div class="content">
+                4.1. Ürün/Hizmet'in temel özellikleri (türü, miktarı, marka/modeli, rengi, adedi, fiyatı) Platform'da yer almakta olup Platform üzerinden detaylı şekilde incelenebilecektir.
+            </div>
+
+            <div class="content">
+                4.2. Ürün/Hizmet karşılığında ödenecek tüm tutarlar (tüm vergiler dahil satış fiyatı, kargo bedeli, taksit farkı tutarı, açık pazar ve/veya diğer butiklerinden eş zamanlı olarak gerçekleştirilen alışverişlerde hak kazanılan toplam indirim tutarı vb.) aşağıdaki tabloda gösterilmiştir.
+            </div>
+
+            <div class="highlight">
+                <strong>📊 SATIN ALINAN ÜRÜNE İLİŞKİN BİLGİLER TABLOSU</strong>
+            </div>
+
+            <div class="content">
+                <div class="list-item">Kargo Hariç Toplam Ürün Bedeli: Sipariş sırasında belirtilecek</div>
+                <div class="list-item">Kargo Ücreti: Sipariş sırasında belirtilecek</div>
+                <div class="list-item">Taksit Farkı: Sipariş sırasında belirtilecek</div>
+                <div class="list-item">Toplam Sipariş Bedeli: Sipariş sırasında belirtilecek</div>
+                <div class="list-item">Ödeme Şekli ve Planı: Sipariş sırasında belirtilecek</div>
+                <div class="list-item">Teslimat Adresi: Sipariş sırasında belirtilecek</div>
+                <div class="list-item">Teslim Edilecek Kişi: Sipariş sırasında belirtilecek</div>
+                <div class="list-item">Fatura Adresi: Sipariş sırasında belirtilecek</div>
+                <div class="list-item">Sipariş Tarihi: Sipariş sırasında belirtilecek</div>
+                <div class="list-item">Teslim Şekli: Sipariş sırasında belirtilecek</div>
+                <div class="list-item">Teslimat Süresi*: En geç 30 gün</div>
+                <div class="list-item">Kargo Şirketi'ne Teslim Süresi: Sipariş sırasında belirtilecek</div>
+            </div>
+
+            <div class="highlight">
+                <strong>💳 Ödeme Koruma Sistemi:</strong><br>
+                SÖZ KONUSU ÜRÜN BEDELİ, "TRENDRUUM ALICI GÜVENCESİ" KAPSAMINDA SATICI ADINA, BECEM TARAFINDAN ALICI'DAN TAHSİL EDİLMEKTEDİR. ALICI MALIN BEDELİNİ BECEM'E ÖDEMEKLE, ÜRÜN BEDELİNİ SATICI'YA ÖDEMİŞ SAYILACAK VE BİR DAHA ÖDEME YÜKÜMLÜLÜĞÜ ALTINA GİRMEYECEKTİR. ALICI'NIN İLGİLİ MEVZUAT KAPSAMINDA İADE HAKLARI SAKLIDIR.
+            </div>
+        </div>
+
+        <div class="update-date">
+            📅 Güncellenme Tarihi: 15.08.2025
+        </div>
+    <div style="height: 30px;"></div>
+</body>
+</html>

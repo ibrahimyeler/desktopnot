@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth Test Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .setup-section {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #007bff;
+        }
+
+        .setup-section h3 {
+            color: #007bff;
+            margin-bottom: 0.5rem;
+        }
+
+        .setup-section ul {
+            margin-left: 1rem;
+            color: #666;
+        }
+
+        .oauth-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-google {
+            background: #db4437;
+            color: white;
+        }
+
+        .btn-google:hover {
+            background: #c23321;
+        }
+
+        .btn-github {
+            background: #333;
+            color: white;
+        }
+
+        .btn-github:hover {
+            background: #24292e;
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .status {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .status.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .status.info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+
+        .response {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .health-check {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .health-status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .health-status.healthy {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .health-status.unhealthy {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 OAuth Authentication Test</h1>
+            <p>Test Google and GitHub OAuth integration</p>
+        </div>
+
+        <div class="health-check">
+            <div id="healthStatus" class="health-status">Checking API health...</div>
+        </div>
+
+        <div class="setup-section">
+            <h3>📋 GitHub OAuth Setup Instructions</h3>
+            <ul>
+                <li>Go to <a href="https://github.com/settings/developers" target="_blank">GitHub Developer Settings</a></li>
+                <li>Click "New OAuth App"</li>
+                <li>Fill in the form:
+                    <ul>
+                        <li><strong>Application name:</strong> Pangea API</li>
+                        <li><strong>Homepage URL:</strong> http://localhost:3000</li>
+                        <li><strong>Authorization callback URL:</strong> http://localhost:8080/auth/github/callback</li>
+                    </ul>
+                </li>
+                <li>Copy the Client ID and Client Secret</li>
+                <li>Set environment variables:
+                    <code>export GITHUB_CLIENT_ID="your_client_id"</code><br>
+                    <code>export GITHUB_CLIENT_SECRET="your_client_secret"</code>
+                </li>
+                <li>Restart the API server</li>
+            </ul>
+        </div>
+
+        <div class="oauth-buttons">
+            <button id="googleBtn" class="btn btn-google" onclick="testGoogleAuth()">
+                🔍 Test Google OAuth
+            </button>
+            
+            <button id="githubBtn" class="btn btn-github" onclick="testGithubAuth()">
+                🔍 Test GitHub OAuth
+            </button>
+        </div>
+
+        <div id="status" class="status"></div>
+        <div id="response" class="response"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080';
+
+        // Check API health on page load
+        window.addEventListener('load', async () => {
+            await checkApiHealth();
+        });
+
+        async function checkApiHealth() {
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                
+                const healthStatus = document.getElementById('healthStatus');
+                if (response.ok) {
+                    healthStatus.textContent = '✅ API Healthy';
+                    healthStatus.className = 'health-status healthy';
+                } else {
+                    healthStatus.textContent = '❌ API Unhealthy';
+                    healthStatus.className = 'health-status unhealthy';
+                }
+            } catch (error) {
+                const healthStatus = document.getElementById('healthStatus');
+                healthStatus.textContent = '❌ API Unreachable';
+                healthStatus.className = 'health-status unhealthy';
+            }
+        }
+
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.style.display = 'block';
+        }
+
+        function showResponse(data) {
+            const responseDiv = document.getElementById('response');
+            responseDiv.textContent = JSON.stringify(data, null, 2);
+            responseDiv.style.display = 'block';
+        }
+
+        async function testGoogleAuth() {
+            try {
+                showStatus('Testing Google OAuth...', 'info');
+                
+                const response = await fetch(`${API_BASE}/auth/google`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    showStatus('✅ Google OAuth is working! Auth URL generated.', 'success');
+                    showResponse(data);
+                } else {
+                    showStatus(`❌ Google OAuth error: ${data.message}`, 'error');
+                    showResponse(data);
+                }
+            } catch (error) {
+                showStatus(`❌ Network error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testGithubAuth() {
+            try {
+                showStatus('Testing GitHub OAuth...', 'info');
+                
+                const response = await fetch(`${API_BASE}/auth/github`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    showStatus('✅ GitHub OAuth is working! Auth URL generated.', 'success');
+                    showResponse(data);
+                } else {
+                    showStatus(`❌ GitHub OAuth error: ${data.message}`, 'error');
+                    showResponse(data);
+                }
+            } catch (error) {
+                showStatus(`❌ Network error: ${error.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html> 
