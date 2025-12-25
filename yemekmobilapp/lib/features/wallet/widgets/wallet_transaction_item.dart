@@ -20,12 +20,8 @@ class WalletTransactionItem extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: AppSizes.paddingS + 2),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(AppSizes.radiusM),
-        border: Border.all(
-          color: AppColors.border,
-          width: 1,
-        ),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -39,13 +35,13 @@ class WalletTransactionItem extends StatelessWidget {
               height: 40,
               decoration: BoxDecoration(
                 color: isDeposit
-                    ? AppColors.success.withOpacity(0.15)
-                    : AppColors.error.withOpacity(0.15),
+                    ? AppColors.successColor.withValues(alpha: 0.15)
+                    : AppColors.errorColor.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 isDeposit ? Icons.add : Icons.remove,
-                color: isDeposit ? AppColors.success : AppColors.error,
+                color: isDeposit ? AppColors.successColor : AppColors.errorColor,
                 size: 20,
               ),
             ),
@@ -77,7 +73,7 @@ class WalletTransactionItem extends StatelessWidget {
             Text(
               '${isDeposit ? '+' : ''}${amount.toStringAsFixed(2)} TL',
               style: TextStyle(
-                color: isDeposit ? AppColors.success : AppColors.error,
+                color: isDeposit ? AppColors.successColor : AppColors.errorColor,
                 fontWeight: FontWeight.w700,
                 fontSize: 15,
               ),

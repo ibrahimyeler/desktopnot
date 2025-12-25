@@ -8,6 +8,7 @@ import 'home_state.dart';
 import 'widgets/home_header.dart';
 import 'widgets/step_menu_section.dart';
 import 'widgets/order_summary_bar.dart';
+import 'widgets/companies_list.dart';
 
 class HomePage extends StatelessWidget {
   final Function(List<Map<String, dynamic>>)? onNavigateToOrder;
@@ -19,10 +20,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => HomeViewModel()..loadDailyMenu(),
-      child: AppScaffold(
-        body: Consumer<HomeViewModel>(
+    return AppScaffold(
+      body: Consumer<HomeViewModel>(
           builder: (context, viewModel, _) {
             final state = viewModel.state;
 
@@ -67,6 +66,27 @@ class HomePage extends StatelessWidget {
               );
             }
 
+            // Şube listesi gösteriliyorsa
+            if (state.showCompaniesList && state.companies != null) {
+              return Container(
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    const HomeHeader(),
+                    Expanded(
+                      child: CompaniesList(
+                        companies: state.companies!,
+                        onCompanySelected: (company) {
+                          viewModel.selectCompany(company);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            // Menü gösteriliyorsa
             return Column(
               children: [
                 Expanded(
@@ -75,7 +95,14 @@ class HomePage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const HomeHeader(),
+                        // Menü sayfası için özel header
+                        HomeHeader(
+                          title: 'Günlük Menü',
+                          subtitle: state.selectedCompany?.address ?? '',
+                          showBranchesText: false,
+                          onBack: () => viewModel.goBackToCompanies(),
+                          isMenuPage: true,
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(AppSizes.paddingL),
                           child: StepMenuSection(
@@ -119,7 +146,6 @@ class HomePage extends StatelessWidget {
             );
           },
         ),
-      ),
     );
   }
 }

@@ -1,17 +1,60 @@
 import 'package:flutter/foundation.dart';
+import '../../shared/models/catering_company.dart';
+
+enum OrderType {
+  pickup, // Gel Al
+  delivery, // Teslim Edilecek
+}
 
 class OrderViewModel extends ChangeNotifier {
   final List<Map<String, dynamic>> _cartItems = [];
   String _selectedPaymentMethod = 'wallet';
+  CateringCompany? _selectedCompany;
+  OrderType _orderType = OrderType.pickup;
 
   List<Map<String, dynamic>> get cartItems => _cartItems;
   String get selectedPaymentMethod => _selectedPaymentMethod;
+  CateringCompany? get selectedCompany => _selectedCompany;
+  OrderType get orderType => _orderType;
 
   double get totalAmount {
-    return _cartItems.fold(
+    double itemsTotal = _cartItems.fold(
       0.0,
       (sum, item) => sum + (item['price'] as num).toDouble() * (item['quantity'] as int),
     );
+    
+    // Teslim edilecek siparişlerde kurye ücreti ekle
+    if (_orderType == OrderType.delivery && _selectedCompany?.deliveryFee != null) {
+      itemsTotal += _selectedCompany!.deliveryFee!;
+    }
+    
+    return itemsTotal;
+  }
+
+  double get deliveryFee {
+    if (_orderType == OrderType.delivery && _selectedCompany?.deliveryFee != null) {
+      return _selectedCompany!.deliveryFee!;
+    }
+    return 0.0;
+  }
+
+  void setCompany(CateringCompany company) {
+    _selectedCompany = company;
+    // Eğer firma sadece gel al destekliyorsa, order type'ı pickup yap
+    if (company.deliveryFee == null) {
+      _orderType = OrderType.pickup;
+    }
+    notifyListeners();
+  }
+
+  void setOrderType(OrderType type) {
+    // Eğer firma sadece gel al destekliyorsa, delivery seçilemez
+    if (type == OrderType.delivery && 
+        (_selectedCompany == null || _selectedCompany!.deliveryFee == null)) {
+      return;
+    }
+    _orderType = type;
+    notifyListeners();
   }
 
   void addToCart(Map<String, dynamic> item) {

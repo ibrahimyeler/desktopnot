@@ -2,17 +2,22 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../order_view_model.dart';
 
 class OrderSummary extends StatelessWidget {
   final List<Map<String, dynamic>> items;
   final Function(String, int)? onQuantityChanged;
   final Function(String)? onRemove;
+  final double deliveryFee;
+  final OrderType orderType;
 
   const OrderSummary({
     super.key,
     required this.items,
     this.onQuantityChanged,
     this.onRemove,
+    this.deliveryFee = 0.0,
+    this.orderType = OrderType.pickup,
   });
 
   @override
@@ -90,6 +95,42 @@ class OrderSummary extends StatelessWidget {
                 onQuantityChanged: onQuantityChanged,
                 onRemove: onRemove,
               )),
+          if (deliveryFee > 0 && orderType == OrderType.delivery) ...[
+            const Divider(height: 1),
+            Padding(
+              padding: const EdgeInsets.all(AppSizes.paddingL),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.local_shipping,
+                        size: 16,
+                        color: AppColors.textSecondary,
+                      ),
+                      const SizedBox(width: AppSizes.paddingS),
+                      const Text(
+                        'Kurye Ücreti',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    '${deliveryFee.toStringAsFixed(0)} TL',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -209,7 +250,7 @@ class _OrderItem extends StatelessWidget {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: AppColors.background,
+                      color: AppColors.backgroundColor,
                       borderRadius: BorderRadius.circular(AppSizes.radiusS),
                       border: Border.all(
                         color: AppColors.border,

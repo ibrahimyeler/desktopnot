@@ -74,6 +74,29 @@ class OrderPaymentSection extends StatelessWidget {
             const SizedBox(height: AppSizes.paddingL),
             const Divider(),
             const SizedBox(height: AppSizes.paddingL),
+            // Subtotal
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Ara Toplam',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+                Text(
+                  '${(totalAmount - (totalAmount * 0.1)).toStringAsFixed(0)} TL',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSizes.paddingS),
+            // Delivery fee (if applicable)
+            // This will be handled by parent component
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -136,7 +159,7 @@ class _PaymentMethodOption extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? AppColors.primary.withOpacity(0.15)
-              : AppColors.background,
+              : AppColors.backgroundColor,
           border: Border.all(
             color: isSelected ? AppColors.primary : AppColors.border,
             width: isSelected ? 1.5 : 1,
@@ -150,7 +173,7 @@ class _PaymentMethodOption extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isSelected
                     ? AppColors.accent.withOpacity(0.1)
-                    : AppColors.background,
+                    : AppColors.backgroundColor,
                 borderRadius: BorderRadius.circular(AppSizes.radiusS),
               ),
               child: Icon(

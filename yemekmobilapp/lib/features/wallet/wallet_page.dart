@@ -42,51 +42,29 @@ class _WalletPageState extends State<WalletPage> with SingleTickerProviderStateM
     return ChangeNotifierProvider(
       create: (_) => WalletViewModel()..loadWalletData(),
       child: AppScaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(kToolbarHeight + 20),
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  const Color(0xFF6B9BD1), // Canlı mavi
-                  const Color(0xFF8BB5D8), // Açık mavi
-                ],
-              ),
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(AppSizes.radiusXL),
-                bottomRight: Radius.circular(AppSizes.radiusXL),
-              ),
-            ),
-            child: SafeArea(
-              bottom: false,
-              child: AppBar(
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios, size: 20),
-                  onPressed: () {
-                    if (widget.onBack != null) {
-                      widget.onBack!();
-                    } else if (Navigator.canPop(context)) {
-                      Navigator.pop(context);
-                    }
-                  },
-                  color: Colors.white,
-                ),
-                title: Text(
-                  AppStrings.walletTitle,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                centerTitle: true,
-              ),
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios, size: 20),
+            onPressed: () {
+              if (widget.onBack != null) {
+                widget.onBack!();
+              } else if (Navigator.canPop(context)) {
+                Navigator.pop(context);
+              }
+            },
+            color: AppColors.textPrimary,
+          ),
+          title: Text(
+            AppStrings.walletTitle,
+            style: const TextStyle(
+              color: AppColors.textPrimary,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
           ),
+          backgroundColor: Colors.white,
+          elevation: 0,
+          centerTitle: true,
         ),
         body: Consumer<WalletViewModel>(
           builder: (context, viewModel, _) {
@@ -154,17 +132,17 @@ class _WalletPageState extends State<WalletPage> with SingleTickerProviderStateM
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: AppSizes.paddingL),
                     decoration: BoxDecoration(
-                      color: AppColors.background,
+                      color: AppColors.cardBackground,
                       borderRadius: BorderRadius.circular(AppSizes.radiusM),
                       border: Border.all(
-                        color: AppColors.border,
+                        color: AppColors.borderColor,
                         width: 1,
                       ),
                     ),
                     child: TabBar(
                       controller: _tabController,
                       indicator: BoxDecoration(
-                        color: AppColors.accent,
+                        color: AppColors.secondaryColor,
                         borderRadius: BorderRadius.circular(AppSizes.radiusM),
                       ),
                       indicatorSize: TabBarIndicatorSize.tab,

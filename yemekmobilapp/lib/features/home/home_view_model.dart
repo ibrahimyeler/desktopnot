@@ -1,17 +1,67 @@
 import 'package:flutter/foundation.dart';
 import 'home_state.dart';
+import '../../shared/services/catering_service.dart';
+import '../../shared/models/catering_company.dart';
 
 class HomeViewModel extends ChangeNotifier {
   HomeState _state = HomeState();
 
   HomeState get state => _state;
 
-  void loadDailyMenu() {
+  // İlk yüklemede firmaları getir
+  Future<void> loadCompanies() async {
+    _state = _state.copyWith(isLoading: true, error: null);
+    notifyListeners();
+
+    try {
+      final companies = await CateringService.getCompaniesSortedByDistance();
+      _state = _state.copyWith(
+        isLoading: false,
+        companies: companies,
+        showCompaniesList: true,
+      );
+    } catch (e) {
+      _state = _state.copyWith(
+        isLoading: false,
+        error: 'Firmalar yüklenirken bir hata oluştu: $e',
+      );
+    }
+    notifyListeners();
+  }
+
+  // Firma seçildiğinde menüyü yükle
+  Future<void> selectCompany(CateringCompany company) async {
+    _state = _state.copyWith(
+      selectedCompany: company,
+      showCompaniesList: false,
+      isLoading: true,
+    );
+    notifyListeners();
+
+    // Menüyü yükle
+    await loadDailyMenu();
+  }
+
+  // Firma listesine geri dön
+  void goBackToCompanies() {
+    _state = _state.copyWith(
+      showCompaniesList: true,
+      selectedCompany: null,
+      activeStep: 0,
+      selectedSoup: null,
+      selectedMainDish: null,
+      selectedSideDish: null,
+      selectedDessert: null,
+    );
+    notifyListeners();
+  }
+
+  Future<void> loadDailyMenu() async {
     _state = _state.copyWith(isLoading: true, error: null);
     notifyListeners();
 
     // Simulate API call
-    Future.delayed(const Duration(seconds: 1), () {
+    await Future.delayed(const Duration(seconds: 1));
       _state = _state.copyWith(
         isLoading: false,
         menuDate: DateTime.now(),
@@ -186,8 +236,7 @@ class HomeViewModel extends ChangeNotifier {
         ],
         walletBalance: 150.0,
       );
-      notifyListeners();
-    });
+    notifyListeners();
   }
 
   void selectSoup(MenuItem item) {
@@ -229,7 +278,11 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   void refresh() {
-    loadDailyMenu();
+    if (_state.showCompaniesList) {
+      loadCompanies();
+    } else {
+      loadDailyMenu();
+    }
   }
 
   Future<void> completeOrder() async {

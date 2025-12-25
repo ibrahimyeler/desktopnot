@@ -21,8 +21,8 @@ class OrderService {
     return await ApiService.get('/orders/$orderId');
   }
 
-  static Future<Map<String, dynamic>> cancelOrder(String orderId) async {
-    return await ApiService.delete('/orders/$orderId');
+  static Future<void> cancelOrder(String orderId) async {
+    await ApiService.delete('/orders/$orderId');
   }
 }
 

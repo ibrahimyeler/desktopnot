@@ -26,7 +26,7 @@ class PrimaryButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary, // Primary renk - Ana CTA
+          backgroundColor: AppColors.secondaryColor, // Modern blue color
           foregroundColor: Colors.white,
           elevation: 0,
           shape: RoundedRectangleBorder(

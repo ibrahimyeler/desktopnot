@@ -1,3 +1,5 @@
+import '../../shared/models/catering_company.dart';
+
 class MenuItem {
   final String id;
   final String name;
@@ -27,6 +29,11 @@ class HomeState {
   final String? error;
   final DateTime? menuDate;
   
+  // Catering companies
+  final List<CateringCompany>? companies;
+  final CateringCompany? selectedCompany;
+  final bool showCompaniesList; // true: firmalar listesi, false: menü
+  
   // Step-based selection
   final int activeStep; // 0: Çorba, 1: Ana Yemek, 2: Yan Yemek, 3: Tatlı
   final MenuItem? selectedSoup;
@@ -47,6 +54,9 @@ class HomeState {
     this.isLoading = false,
     this.error,
     this.menuDate,
+    this.companies,
+    this.selectedCompany,
+    this.showCompaniesList = true, // Başlangıçta firmalar listesi göster
     this.activeStep = 0,
     this.selectedSoup,
     this.selectedMainDish,
@@ -96,6 +106,9 @@ class HomeState {
     bool? isLoading,
     String? error,
     DateTime? menuDate,
+    List<CateringCompany>? companies,
+    CateringCompany? selectedCompany,
+    bool? showCompaniesList,
     int? activeStep,
     MenuItem? selectedSoup,
     MenuItem? selectedMainDish,
@@ -111,6 +124,9 @@ class HomeState {
       isLoading: isLoading ?? this.isLoading,
       error: error ?? this.error,
       menuDate: menuDate ?? this.menuDate,
+      companies: companies ?? this.companies,
+      selectedCompany: selectedCompany ?? this.selectedCompany,
+      showCompaniesList: showCompaniesList ?? this.showCompaniesList,
       activeStep: activeStep ?? this.activeStep,
       selectedSoup: selectedSoup ?? this.selectedSoup,
       selectedMainDish: selectedMainDish ?? this.selectedMainDish,
