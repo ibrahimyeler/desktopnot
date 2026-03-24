@@ -73,6 +73,6 @@ jobs:
             - **macOS (Intel)**: `.dmg` dosyası
             - **Windows**: `.msi` veya `.exe`
             - **Linux**: `.deb` veya `.AppImage`
-          releaseDraft: true
+          releaseDraft: false
           prerelease: false
           args: ${{ matrix.args }}
