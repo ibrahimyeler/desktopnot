@@ -58,10 +58,21 @@ jobs:
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
           tagName: ${{ github.ref_name }}
           releaseName: 'NotApp ${{ github.ref_name }}'
-          releaseBody: 'Cross-platform build'
+          releaseBody: |
+            ## NotApp ${{ github.ref_name }}
+
+            Otomatik güncelleme destekli cross-platform build.
+
+            ### İndirme
+            - **macOS (Apple Silicon)**: `.dmg` dosyası
+            - **macOS (Intel)**: `.dmg` dosyası
+            - **Windows**: `.msi` veya `.exe`
+            - **Linux**: `.deb` veya `.AppImage`
           releaseDraft: true
           prerelease: false
           args: ${{ matrix.args }}
