@@ -4,7 +4,7 @@ import { GripVertical, Plus, Check, ImagePlus, X } from 'lucide-react';
 import type { Block, BlockType } from '../../types';
 
 export default function NoteEditor() {
-  const { getActiveNote, updateFileTitle } = useAppStore();
+  const { getActiveNote } = useAppStore();
   const note = getActiveNote();
   if (!note) return null;
 

@@ -50,8 +50,6 @@ export default function Home() {
   const showTemplates = store.showTemplates ?? false;
   const setShowTemplates = store.setShowTemplates;
   const createFromTemplate = store.createFromTemplate;
-  const templateFilter = store.templateFilter ?? null;
-
   // Tüm hook'lar burada — early return'den ÖNCE
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<'all' | 'note' | 'spreadsheet'>('all');

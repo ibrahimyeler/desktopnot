@@ -1,4 +1,3 @@
-import { useAppStore } from '../../store/useAppStore';
 import FormulaBar from './FormulaBar';
 import Grid from './Grid';
 import SheetTabs from './SheetTabs';

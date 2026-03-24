@@ -26,7 +26,7 @@ const NEW_FILE_TYPES = [
 ];
 
 export default function Sidebar() {
-  const { sidebarOpen, files, activeFileId, openFile, createFile, goHome, sidebarFilter, setSidebarFilter, setRoute, showTemplates, setShowTemplates, updateFileTitle } = useAppStore();
+  const { sidebarOpen, files, activeFileId, openFile, goHome, sidebarFilter, setSidebarFilter, setRoute, showTemplates, setShowTemplates } = useAppStore();
   const [showFiles, setShowFiles] = useState(true);
   const [showNewMenu, setShowNewMenu] = useState(false);
   const [naming, setNaming] = useState<{ type: 'note' | 'spreadsheet'; icon: string; ext: string } | null>(null);

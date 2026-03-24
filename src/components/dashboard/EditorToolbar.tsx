@@ -1,4 +1,4 @@
-import { ArrowLeft, Bold, Italic, Underline, Strikethrough, AlignLeft, AlignCenter, AlignRight, AlignJustify, List, ListOrdered, CheckSquare, Heading1, Heading2, Heading3, Quote, Code, Minus, ImagePlus, Link2, Undo2, Redo2, Type, ChevronDown, Paintbrush, Highlighter, Star, MoreHorizontal, Printer, Download, Subscript, Superscript, Eraser, SeparatorHorizontal, Indent, Outdent, Copy, ClipboardPaste } from 'lucide-react';
+import { ArrowLeft, Bold, Italic, Underline, Strikethrough, AlignLeft, AlignCenter, AlignRight, AlignJustify, List, ListOrdered, CheckSquare, Heading1, Heading2, Heading3, Quote, Code, Minus, ImagePlus, Link2, Undo2, Redo2, Type, ChevronDown, Paintbrush, Highlighter, Star, MoreHorizontal, Printer, Download, Eraser, SeparatorHorizontal, Indent, Outdent } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import { useState, createContext, useContext, useEffect, useRef } from 'react';
 import type { BlockType } from '../../types';
@@ -9,7 +9,7 @@ const TEXT_COLORS = ['#0F172A', '#334155', '#64748B', '#DC2626', '#EA580C', '#D9
 const BG_COLORS = ['transparent', '#FEE2E2', '#FFEDD5', '#FEF3C7', '#DCFCE7', '#DBEAFE', '#EDE9FE', '#FCE7F3', '#F1F5F9', '#E2E8F0', '#FEF9C3', '#CCFBF1'];
 
 export default function EditorToolbar() {
-  const { getActiveFile, updateFileTitle, toggleFavorite, goHome, activeCell, setCellFormat, getCell, addBlock, focusedBlockId, changeBlockType } = useAppStore();
+  const { getActiveFile, updateFileTitle, toggleFavorite, goHome, activeCell, setCellFormat, getCell, addBlock, focusedBlockId } = useAppStore();
   const file = getActiveFile();
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const barRef = useRef<HTMLDivElement>(null);
@@ -186,7 +186,7 @@ function BlockTypeDrop() {
   const { addBlock, focusedBlockId, changeBlockType } = useAppStore();
   const { open: openMenu, setOpen: setOpenMenu } = useContext(MenuCtx);
   const open = openMenu === 'blockType';
-  const items: { type: BlockType; icon: React.ComponentType<{ size?: number }>; label: string; color: string }[] = [
+  const items: { type: BlockType; icon: React.ComponentType<{ size?: number; style?: React.CSSProperties }>; label: string; color: string }[] = [
     { type: 'text', icon: Type, label: 'Metin', color: '#64748B' },
     { type: 'heading1', icon: Heading1, label: 'Başlık 1', color: '#3B82F6' },
     { type: 'heading2', icon: Heading2, label: 'Başlık 2', color: '#6366F1' },
@@ -217,7 +217,7 @@ function BlockTypeDrop() {
 }
 
 // Renk dropdown
-function ColorDrop({ icon: I, tip, colors, command, onSelect, accent }: { icon: React.ComponentType<{ size?: number; className?: string }>; tip: string; colors: string[]; command: string; onSelect?: (c: string) => void; accent?: string }) {
+function ColorDrop({ icon: I, tip, colors, command, onSelect, accent }: { icon: React.ComponentType<{ size?: number; className?: string; style?: React.CSSProperties }>; tip: string; colors: string[]; command: string; onSelect?: (c: string) => void; accent?: string }) {
   const menuId = `color-${command}`;
   const { open: openMenu, setOpen: setOpenMenu } = useContext(MenuCtx);
   const open = openMenu === menuId;

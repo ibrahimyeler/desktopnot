@@ -470,7 +470,8 @@ export const useAppStore = create<AppState>((set, get) => ({
     const c0 = Math.min(range.start.col, range.end.col), c1 = Math.max(range.start.col, range.end.col);
     for (let r = r0; r <= r1; r++) for (let c = c0; c <= c1; c++) {
       const k = cellKey(r, c);
-      newCells[k] = { value: newCells[k]?.value ?? '', ...newCells[k], format: { ...newCells[k]?.format, ...fmt } };
+      const existing = newCells[k];
+      newCells[k] = { ...existing, value: existing?.value ?? '', format: { ...existing?.format, ...fmt } };
     }
     return { files: s.files.map((f) => f.id === sp.id ? { ...f, sheets: (f as SpreadsheetFile).sheets.map((sh) => sh.id === sp.activeSheetId ? { ...sh, cells: newCells } : sh) } : f) };
   }),
