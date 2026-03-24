@@ -66,7 +66,7 @@ export default function SplashPage() {
 
         {/* Alt */}
         <div className="flex items-center justify-between px-10 h-[48px] text-[11px] text-[#CBD5E1] shrink-0">
-          <span>© 2026 NotApp. Tüm hakları saklıdır.</span>
+          <span>© 2026 NotApp. Tüm hakları saklıdır. — v1.1.2</span>
           <div className="flex gap-4">
             <span className="hover:text-[#94A3B8] cursor-pointer transition-colors">Gizlilik</span>
             <span className="hover:text-[#94A3B8] cursor-pointer transition-colors">Kullanım Şartları</span>
