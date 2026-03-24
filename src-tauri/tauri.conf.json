@@ -40,7 +40,7 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDYzNDlEMThERTA2MEYyNkUKUldSdThtRGdqZEZKWXpFdDlyS1hnM2NnSTlieVdpamdxMUZ0Wk10K20xMXU4ZHpFWmo0TFc5eUEK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDYwMTcwQzQ5MzRFNTZDMApSV1RBVms2VHhIQUJCcEY1aVVNdUFSNUhCNTZ2ZGRiOE9DdHdmaTVUTElucHExQlZ6eHVtckgzUwo=",
       "endpoints": [
         "https://github.com/ibrahimyeler/desktopnot/releases/latest/download/latest.json"
       ]
