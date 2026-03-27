@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import type { AnyFile, NoteFile, SpreadsheetFile, Block, BlockType, CellData, CellFormat, Sheet, AppRoute } from '../types';
-import { uid, cellKey, createBlock, createNote, createSpreadsheet } from '../types';
+import type { AnyFile, NoteFile, SpreadsheetFile, Block, BlockType, CellData, CellFormat, Sheet, AppRoute, HomeTab, Task, TeamMember, Team, CalendarEvent } from '../types';
+import { uid, cellKey, createBlock, createNote, createSpreadsheet, createTask } from '../types';
 
 // ── Demo Veriler ──
 const demoNote = createNote('Proje Notları');
@@ -20,193 +20,97 @@ demoNote.blocks = [
   createBlock('text', ''),
 ];
 
-const demoSheet = createSpreadsheet('Ürün Envanter Tablosu');
+const demoSheet = createSpreadsheet('Urun Envanter Tablosu');
 demoSheet.icon = '📊';
+demoSheet.isFavorite = true;
 const sh = demoSheet.sheets[0];
 const data: Record<string, { v: string; bold?: boolean; fill?: string }> = {
-  '0:0': { v: 'Ürün', bold: true, fill: '#F1F5F9' },
+  '0:0': { v: 'Urun', bold: true, fill: '#F1F5F9' },
   '0:1': { v: 'Kategori', bold: true, fill: '#F1F5F9' },
-  '0:2': { v: 'Fiyat (₺)', bold: true, fill: '#F1F5F9' },
-  '0:3': { v: 'Stok', bold: true, fill: '#F1F5F9' },
-  '0:4': { v: 'Durum', bold: true, fill: '#F1F5F9' },
-  '1:0': { v: 'MacBook Air' }, '1:1': { v: 'Elektronik' }, '1:2': { v: '42.999' }, '1:3': { v: '24' }, '1:4': { v: 'Aktif' },
-  '2:0': { v: 'iPad Pro' }, '2:1': { v: 'Elektronik' }, '2:2': { v: '34.499' }, '2:3': { v: '18' }, '2:4': { v: 'Aktif' },
-  '3:0': { v: 'AirPods Pro' }, '3:1': { v: 'Aksesuar' }, '3:2': { v: '7.999' }, '3:3': { v: '156' }, '3:4': { v: 'Aktif' },
-  '4:0': { v: 'Magic Keyboard' }, '4:1': { v: 'Aksesuar' }, '4:2': { v: '11.499' }, '4:3': { v: '42' }, '4:4': { v: 'Aktif' },
-  '5:0': { v: 'Studio Display' }, '5:1': { v: 'Monitör' }, '5:2': { v: '52.999' }, '5:3': { v: '8' }, '5:4': { v: 'Düşük Stok' },
+  '0:2': { v: 'Stok', bold: true, fill: '#F1F5F9' },
+  '0:3': { v: 'Fiyat', bold: true, fill: '#F1F5F9' },
+  '1:0': { v: 'MacBook Air' }, '1:1': { v: 'Elektronik' }, '1:2': { v: '24' }, '1:3': { v: '42.999' },
+  '2:0': { v: 'iPad Pro' }, '2:1': { v: 'Elektronik' }, '2:2': { v: '18' }, '2:3': { v: '34.499' },
+  '3:0': { v: 'AirPods Pro' }, '3:1': { v: 'Aksesuar' }, '3:2': { v: '156' }, '3:3': { v: '7.999' },
 };
 for (const [k, d] of Object.entries(data)) {
   sh.cells[k] = { value: d.v, format: d.bold ? { bold: true, fillColor: d.fill } : undefined };
 }
 
-const demoNote2 = createNote('Toplantı Notları');
-demoNote2.icon = '📋';
-demoNote2.blocks = [
-  createBlock('heading1', 'Haftalık Toplantı'),
-  createBlock('text', '15 Mart 2026 — Katılımcılar: Ahmet, Ayşe, Mehmet'),
-  createBlock('heading2', 'Gündem'),
-  createBlock('numberedList', 'Sprint değerlendirmesi'),
-  createBlock('numberedList', 'Yeni özellik planlaması'),
-  createBlock('numberedList', 'Bug raporları'),
-  createBlock('text', ''),
-];
-
-// Demo: PDF dosyası
-const demoPdf = createNote('Şirket Politikası 2026');
-demoPdf.icon = '📕';
-demoPdf.blocks = [
-  createBlock('heading1', 'Şirket Politikası'),
-  createBlock('text', 'Bu belge, şirket içi çalışma kurallarını ve politikalarını içermektedir.'),
-  createBlock('heading2', 'Çalışma Saatleri'),
-  createBlock('text', 'Hafta içi 09:00 - 18:00 arasında çalışılır. Esnek çalışma saatleri mevcuttur.'),
-  createBlock('heading2', 'İzin Politikası'),
-  createBlock('bulletList', 'Yıllık izin: 14 gün'),
-  createBlock('bulletList', 'Hastalık izni: Rapor ile sınırsız'),
-  createBlock('bulletList', 'Uzaktan çalışma: Haftada 2 gün'),
-];
-
-// Demo: Excel dosyası
-const demoExcel = createSpreadsheet('Bütçe Raporu Q1');
-demoExcel.icon = '📊';
-const exSheet = demoExcel.sheets[0];
-const exData: Record<string, { v: string; bold?: boolean; fill?: string }> = {
-  '0:0': { v: 'Ay', bold: true, fill: '#F0FDF4' }, '0:1': { v: 'Gelir (₺)', bold: true, fill: '#F0FDF4' }, '0:2': { v: 'Gider (₺)', bold: true, fill: '#F0FDF4' }, '0:3': { v: 'Kâr (₺)', bold: true, fill: '#F0FDF4' },
-  '1:0': { v: 'Ocak' }, '1:1': { v: '125.000' }, '1:2': { v: '87.500' }, '1:3': { v: '37.500' },
-  '2:0': { v: 'Şubat' }, '2:1': { v: '142.000' }, '2:2': { v: '91.300' }, '2:3': { v: '50.700' },
-  '3:0': { v: 'Mart' }, '3:1': { v: '158.500' }, '3:2': { v: '95.200' }, '3:3': { v: '63.300' },
+// Ek demo dosyalar
+const demoSheet2 = createSpreadsheet('Musteri Listesi');
+demoSheet2.icon = '📋';
+const sh2 = demoSheet2.sheets[0];
+const data2: Record<string, { v: string; bold?: boolean; fill?: string }> = {
+  '0:0': { v: 'Musteri', bold: true, fill: '#F1F5F9' }, '0:1': { v: 'Telefon', bold: true, fill: '#F1F5F9' }, '0:2': { v: 'Sehir', bold: true, fill: '#F1F5F9' },
+  '1:0': { v: 'Ali Veli' }, '1:1': { v: '0532 111 22 33' }, '1:2': { v: 'Istanbul' },
+  '2:0': { v: 'Zeynep Ak' }, '2:1': { v: '0544 222 33 44' }, '2:2': { v: 'Ankara' },
 };
-for (const [k, d] of Object.entries(exData)) {
-  exSheet.cells[k] = { value: d.v, format: d.bold ? { bold: true, fillColor: d.fill } : undefined };
+for (const [k, d] of Object.entries(data2)) {
+  sh2.cells[k] = { value: d.v, format: d.bold ? { bold: true, fillColor: d.fill } : undefined };
 }
 
-// Demo: Word dosyası
-const demoWord = createNote('Proje Teklifi — NotApp');
-demoWord.icon = '📃';
-demoWord.blocks = [
-  createBlock('heading1', 'NotApp Proje Teklifi'),
-  createBlock('text', 'Tarih: 24 Mart 2026'),
-  createBlock('divider'),
-  createBlock('heading2', 'Özet'),
-  createBlock('text', 'NotApp, masaüstü ve mobil platformlarda çalışan modern bir not alma ve tablo yönetim uygulamasıdır. Kullanıcılar metin, tablo, kontrol listesi ve görsel içeriklerini tek bir yerden yönetebilir.'),
-  createBlock('heading2', 'Hedefler'),
-  createBlock('numberedList', 'Kullanıcı dostu arayüz tasarımı'),
-  createBlock('numberedList', 'Gerçek zamanlı senkronizasyon'),
-  createBlock('numberedList', 'Çoklu platform desteği (masaüstü, mobil, web)'),
-  createBlock('numberedList', 'Güvenli veri depolama'),
-];
-
-// Demo: PowerPoint dosyası
-const demoPpt = createNote('Ürün Lansmanı Sunumu');
-demoPpt.icon = '📙';
-demoPpt.blocks = [
-  createBlock('heading1', 'NotApp — Ürün Lansmanı'),
-  createBlock('text', 'Q2 2026 Lansman Planı'),
-  createBlock('divider'),
-  createBlock('heading2', 'Slayt 1: Vizyon'),
-  createBlock('quote', 'Notlarınızı bir üst seviyeye taşıyın.'),
-  createBlock('heading2', 'Slayt 2: Özellikler'),
-  createBlock('bulletList', 'Blok tabanlı zengin editör'),
-  createBlock('bulletList', 'Akıllı tablo yönetimi'),
-  createBlock('bulletList', 'Anlık masaüstü-mobil eşitleme'),
-  createBlock('heading2', 'Slayt 3: Yol Haritası'),
-  createBlock('checklist', 'Alpha sürüm — Nisan 2026', { checked: true }),
-  createBlock('checklist', 'Beta sürüm — Haziran 2026', { checked: false }),
-  createBlock('checklist', 'Genel kullanıma açılış — Eylül 2026', { checked: false }),
-];
-
-// Demo: Metin dosyası
-const demoTxt = createNote('hızlı notlar');
-demoTxt.icon = '📝';
-demoTxt.blocks = [
-  createBlock('text', 'Alışveriş listesi: süt, ekmek, yumurta, peynir'),
-  createBlock('text', 'Toplantı saati: 14:30'),
-  createBlock('text', 'Kargo takip numarası: TR9283746501'),
-  createBlock('divider'),
-  createBlock('text', 'Fikir: Uygulama içi yapay zeka asistanı eklenebilir'),
-];
-
-// Demo: Markdown dosyası
-const demoMd = createNote('API Dokümantasyonu');
-demoMd.icon = '📑';
-demoMd.blocks = [
-  createBlock('heading1', 'NotApp API v1'),
-  createBlock('text', 'RESTful API ile tüm dosya işlemlerini gerçekleştirebilirsiniz.'),
-  createBlock('heading2', 'Kimlik Doğrulama'),
-  createBlock('code', 'Authorization: Bearer <token>', { language: 'http' }),
-  createBlock('heading2', 'Uç Noktalar'),
-  createBlock('heading3', 'Dosyaları Listele'),
-  createBlock('code', 'GET /api/v1/files\nContent-Type: application/json', { language: 'http' }),
-  createBlock('heading3', 'Dosya Oluştur'),
-  createBlock('code', 'POST /api/v1/files\n{\n  "title": "Yeni Not",\n  "type": "note"\n}', { language: 'json' }),
-];
-
-// Demo: Görsel dosyası
-const demoImage = createNote('Tasarım Mockup');
-demoImage.icon = '🖼️';
-demoImage.blocks = [
-  createBlock('heading1', 'NotApp Arayüz Tasarımı'),
-  createBlock('text', 'Aşağıda uygulamanın ana ekran tasarım taslağı yer almaktadır.'),
-  createBlock('image', ''),
-  createBlock('text', 'Not: Yukarıdaki görsel alanına cihazınızdan bir görsel yükleyebilirsiniz.'),
-];
-
-// ── Şablonlar ──
-export interface Template {
-  id: string;
-  title: string;
-  icon: string;
-  lucideIcon: string;
-  type: 'note' | 'spreadsheet';
-  category: string;
-  subcategory: string;
-  description: string;
-  color: string;
-  blocks?: Array<{ type: BlockType; content: string; meta?: Block['meta'] }>;
-  data?: Record<string, { v: string; bold?: boolean; fill?: string }>;
+const demoSheet3 = createSpreadsheet('Gelir-Gider Takibi');
+demoSheet3.icon = '💰';
+const sh3 = demoSheet3.sheets[0];
+const data3: Record<string, { v: string; bold?: boolean; fill?: string }> = {
+  '0:0': { v: 'Tarih', bold: true, fill: '#F1F5F9' }, '0:1': { v: 'Aciklama', bold: true, fill: '#F1F5F9' }, '0:2': { v: 'Tutar', bold: true, fill: '#F1F5F9' },
+  '1:0': { v: '01.03.2026' }, '1:1': { v: 'Kira odemesi' }, '1:2': { v: '-12.500' },
+  '2:0': { v: '05.03.2026' }, '2:1': { v: 'Musteri odemesi' }, '2:2': { v: '+45.000' },
+};
+for (const [k, d] of Object.entries(data3)) {
+  sh3.cells[k] = { value: d.v, format: d.bold ? { bold: true, fillColor: d.fill } : undefined };
 }
 
-export const TEMPLATES: Template[] = [
-  // Not — İş
-  { id: 't1', title: 'Toplantı Notları', icon: '📋', lucideIcon: 'ClipboardList', type: 'note', category: 'not', subcategory: 'İş', description: 'Gündem, katılımcılar ve aksiyonlar', color: '#3B82F6',
-    blocks: [{ type: 'heading1', content: 'Toplantı Notları' }, { type: 'text', content: 'Tarih: ' }, { type: 'text', content: 'Katılımcılar: ' }, { type: 'heading2', content: 'Gündem' }, { type: 'numberedList', content: '' }, { type: 'heading2', content: 'Kararlar' }, { type: 'checklist', content: '', meta: { checked: false } }, { type: 'heading2', content: 'Aksiyonlar' }, { type: 'checklist', content: '', meta: { checked: false } }] },
-  { id: 't2', title: 'Proje Planı', icon: '🎯', lucideIcon: 'Target', type: 'note', category: 'not', subcategory: 'İş', description: 'Hedefler, görevler ve zaman çizelgesi', color: '#6366F1',
-    blocks: [{ type: 'heading1', content: 'Proje Planı' }, { type: 'heading2', content: 'Proje Özeti' }, { type: 'text', content: '' }, { type: 'heading2', content: 'Hedefler' }, { type: 'checklist', content: '', meta: { checked: false } }, { type: 'checklist', content: '', meta: { checked: false } }, { type: 'heading2', content: 'Zaman Çizelgesi' }, { type: 'numberedList', content: 'Faz 1 — ' }, { type: 'numberedList', content: 'Faz 2 — ' }] },
-  { id: 't3', title: 'Haftalık Rapor', icon: '📊', lucideIcon: 'BarChart3', type: 'note', category: 'not', subcategory: 'İş', description: 'Haftalık ilerleme ve hedefler', color: '#10B981',
-    blocks: [{ type: 'heading1', content: 'Haftalık Rapor' }, { type: 'text', content: 'Hafta: ' }, { type: 'heading2', content: 'Tamamlanan İşler' }, { type: 'checklist', content: '', meta: { checked: true } }, { type: 'heading2', content: 'Devam Eden İşler' }, { type: 'checklist', content: '', meta: { checked: false } }, { type: 'heading2', content: 'Gelecek Hafta Planı' }, { type: 'bulletList', content: '' }] },
+const demoNote2 = createNote('Toplanti Notlari - 24 Mart');
+demoNote2.icon = '📋';
+demoNote2.isFavorite = true;
+demoNote2.blocks = [
+  createBlock('heading1', 'Haftalik Toplanti'),
+  createBlock('text', 'Bugunku toplantida sunlar konusuldu:'),
+  createBlock('bulletList', 'Istanbul teslimati 27 Nisana alindi'),
+  createBlock('bulletList', 'Yeni sofor: Mehmet Yildiz'),
+  createBlock('checklist', 'Fatura sistemi guncellenmeli', { checked: false }),
+];
 
-  // Not — İçerik
-  { id: 't4', title: 'Blog Yazısı', icon: '✍️', lucideIcon: 'PenLine', type: 'note', category: 'not', subcategory: 'İçerik', description: 'Başlık, giriş, ana içerik, sonuç', color: '#8B5CF6',
-    blocks: [{ type: 'heading1', content: '' }, { type: 'quote', content: 'Kısa bir özet veya alıntı' }, { type: 'heading2', content: 'Giriş' }, { type: 'text', content: '' }, { type: 'heading2', content: 'Ana İçerik' }, { type: 'text', content: '' }, { type: 'heading2', content: 'Sonuç' }, { type: 'text', content: '' }] },
+const demoNote3 = createNote('Operasyon Plani');
+demoNote3.icon = '📑';
+demoNote3.blocks = [
+  createBlock('heading1', 'Operasyon Plani'),
+  createBlock('text', 'Haftalik teslimat rotalari belirlendi'),
+  createBlock('checklist', 'Rota optimizasyonu', { checked: true }),
+  createBlock('checklist', 'Arac bakim takvimi', { checked: false }),
+];
 
-  // Not — Üretkenlik
-  { id: 't5', title: 'Yapılacaklar Listesi', icon: '✅', lucideIcon: 'ListChecks', type: 'note', category: 'not', subcategory: 'Üretkenlik', description: 'Günlük görev takibi', color: '#F59E0B',
-    blocks: [{ type: 'heading1', content: 'Yapılacaklar' }, { type: 'heading2', content: 'Yüksek Öncelik' }, { type: 'checklist', content: '', meta: { checked: false } }, { type: 'checklist', content: '', meta: { checked: false } }, { type: 'heading2', content: 'Normal' }, { type: 'checklist', content: '', meta: { checked: false } }, { type: 'heading2', content: 'Düşük Öncelik' }, { type: 'checklist', content: '', meta: { checked: false } }] },
+const demoNote4 = createNote('Yeni Sofor Oryantasyon');
+demoNote4.icon = '📄';
+demoNote4.blocks = [
+  createBlock('heading1', 'Oryantasyon Rehberi'),
+  createBlock('text', 'Mehmet Yildiz - 26 Nisan basliyor'),
+  createBlock('bulletList', 'Arac teslim proseduru'),
+  createBlock('bulletList', 'Guvenlik egitimi'),
+];
 
-  // Not — Geliştirici
-  { id: 't6', title: 'Teknik Dokümantasyon', icon: '📑', lucideIcon: 'BookOpen', type: 'note', category: 'not', subcategory: 'Geliştirici', description: 'API, kurulum, kullanım kılavuzu', color: '#0EA5E9',
-    blocks: [{ type: 'heading1', content: 'Dokümantasyon' }, { type: 'heading2', content: 'Genel Bakış' }, { type: 'text', content: '' }, { type: 'heading2', content: 'Kurulum' }, { type: 'code', content: '', meta: { language: 'bash' } }, { type: 'heading2', content: 'Kullanım' }, { type: 'code', content: '', meta: { language: 'javascript' } }] },
+// Demo ekip
+const ME: TeamMember = { id: 'me', username: 'ibrahimyeler', name: 'Ibrahim Yeler', role: 'Yonetici', avatar: '#007AFF', isOnline: true };
+const demoMembers: TeamMember[] = [
+  ME,
+  { id: 'driver1', username: 'ahmetkaya', name: 'Ahmet Kaya', role: 'Sofor', avatar: '#34C759', isOnline: true },
+  { id: 'member1', username: 'aysedemir', name: 'Ayse Demir', role: 'Muhasebe', avatar: '#FF9500', isOnline: false },
+];
 
-  // Tablo — Finans
-  { id: 't7', title: 'Bütçe Tablosu', icon: '💰', lucideIcon: 'Wallet', type: 'spreadsheet', category: 'tablo', subcategory: 'Finans', description: 'Gelir-gider takibi', color: '#16A34A',
-    data: { '0:0': { v: 'Kalem', bold: true, fill: '#F0FDF4' }, '0:1': { v: 'Tutar (₺)', bold: true, fill: '#F0FDF4' }, '0:2': { v: 'Kategori', bold: true, fill: '#F0FDF4' }, '0:3': { v: 'Tarih', bold: true, fill: '#F0FDF4' } } },
+// Demo ekipler
+const demoTeams: Team[] = [
+  { id: 'team-is', name: 'Is Ekibi', memberIds: ['me', 'driver1', 'member1'], createdAt: new Date().toISOString() },
+  { id: 'team-gundelik', name: 'Gundelik', memberIds: ['me'], createdAt: new Date().toISOString() },
+];
 
-  // Tablo — Satış
-  { id: 't8', title: 'Müşteri Listesi', icon: '👥', lucideIcon: 'Users', type: 'spreadsheet', category: 'tablo', subcategory: 'Satış', description: 'İletişim bilgileri ve durumlar', color: '#3B82F6',
-    data: { '0:0': { v: 'Ad Soyad', bold: true, fill: '#EFF6FF' }, '0:1': { v: 'E-posta', bold: true, fill: '#EFF6FF' }, '0:2': { v: 'Telefon', bold: true, fill: '#EFF6FF' }, '0:3': { v: 'Şirket', bold: true, fill: '#EFF6FF' }, '0:4': { v: 'Durum', bold: true, fill: '#EFF6FF' } } },
-  { id: 't9', title: 'Ürün Envanteri', icon: '📦', lucideIcon: 'Package', type: 'spreadsheet', category: 'tablo', subcategory: 'Satış', description: 'Stok takibi ve fiyatlandırma', color: '#EA580C',
-    data: { '0:0': { v: 'Ürün', bold: true, fill: '#FFF7ED' }, '0:1': { v: 'SKU', bold: true, fill: '#FFF7ED' }, '0:2': { v: 'Fiyat (₺)', bold: true, fill: '#FFF7ED' }, '0:3': { v: 'Stok', bold: true, fill: '#FFF7ED' }, '0:4': { v: 'Durum', bold: true, fill: '#FFF7ED' } } },
-
-  // Tablo — Proje
-  { id: 't10', title: 'Proje Takibi', icon: '🗂️', lucideIcon: 'FolderKanban', type: 'spreadsheet', category: 'tablo', subcategory: 'Proje', description: 'Görev, sorumlu ve ilerleme', color: '#6366F1',
-    data: { '0:0': { v: 'Görev', bold: true, fill: '#EEF2FF' }, '0:1': { v: 'Sorumlu', bold: true, fill: '#EEF2FF' }, '0:2': { v: 'Durum', bold: true, fill: '#EEF2FF' }, '0:3': { v: 'Öncelik', bold: true, fill: '#EEF2FF' }, '0:4': { v: 'Tarih', bold: true, fill: '#EEF2FF' } } },
-
-  // Tablo — Planlama
-  { id: 't11', title: 'Takvim / Planlama', icon: '📅', lucideIcon: 'CalendarDays', type: 'spreadsheet', category: 'tablo', subcategory: 'Planlama', description: 'Haftalık veya aylık plan', color: '#EC4899',
-    data: { '0:0': { v: 'Pazartesi', bold: true, fill: '#FDF2F8' }, '0:1': { v: 'Salı', bold: true, fill: '#FDF2F8' }, '0:2': { v: 'Çarşamba', bold: true, fill: '#FDF2F8' }, '0:3': { v: 'Perşembe', bold: true, fill: '#FDF2F8' }, '0:4': { v: 'Cuma', bold: true, fill: '#FDF2F8' } } },
-
-  // Tablo — İK
-  { id: 't12', title: 'İK — Personel Tablosu', icon: '🏢', lucideIcon: 'Building2', type: 'spreadsheet', category: 'tablo', subcategory: 'İK', description: 'Çalışan bilgileri', color: '#0D9488',
-    data: { '0:0': { v: 'Ad Soyad', bold: true, fill: '#F0FDFA' }, '0:1': { v: 'Departman', bold: true, fill: '#F0FDFA' }, '0:2': { v: 'Pozisyon', bold: true, fill: '#F0FDFA' }, '0:3': { v: 'Başlangıç', bold: true, fill: '#F0FDFA' }, '0:4': { v: 'E-posta', bold: true, fill: '#F0FDFA' } } },
+// Demo görevler
+const demoTasks: Task[] = [
+  { ...createTask('İstanbul deposundan malzeme al', 'driver1', 'me', 'high'), status: 'in_progress' },
+  { ...createTask('Fatura ödemelerini kontrol et', 'member1', 'me', 'medium') },
+  { ...createTask('Haftalık rapor hazırla', 'me', 'me', 'medium'), status: 'in_progress' },
+  { ...createTask('Müşteri toplantısı notlarını gönder', 'me', 'me', 'low'), status: 'completed' },
 ];
 
 // ── Store ──
@@ -214,6 +118,45 @@ interface AppState {
   route: AppRoute;
   setRoute: (r: AppRoute) => void;
 
+  homeTab: HomeTab;
+  setHomeTab: (t: HomeTab) => void;
+
+  // Kullanici
+  currentUser: TeamMember;
+
+  // Tum uyeler (global havuz)
+  allMembers: TeamMember[];
+  addMember: (m: TeamMember) => void;
+  removeMember: (id: string) => void;
+
+  // Ekipler
+  teams: Team[];
+  activeTeamId: string;
+  createTeam: (name: string) => void;
+  deleteTeam: (id: string) => void;
+  renameTeam: (id: string, name: string) => void;
+  setActiveTeam: (id: string) => void;
+  addMemberToTeam: (teamId: string, memberId: string) => void;
+  removeMemberFromTeam: (teamId: string, memberId: string) => void;
+
+  // Aktif ekip uyelerine erisim
+  team: TeamMember[];
+  addTeamMember: (m: TeamMember) => void;
+  removeTeamMember: (id: string) => void;
+
+  // Görevler
+  tasks: Task[];
+  addTask: (t: Task) => void;
+  updateTask: (id: string, updates: Partial<Task>) => void;
+  deleteTask: (id: string) => void;
+
+  // Takvim
+  calendarEvents: CalendarEvent[];
+  addCalendarEvent: (e: CalendarEvent) => void;
+  updateCalendarEvent: (id: string, updates: Partial<CalendarEvent>) => void;
+  deleteCalendarEvent: (id: string) => void;
+
+  // Dosyalar
   files: AnyFile[];
   activeFileId: string | null;
 
@@ -229,12 +172,6 @@ interface AppState {
   // UI
   sidebarOpen: boolean;
   inspectorOpen: boolean;
-  sidebarFilter: 'all' | 'recent' | 'favorites';
-  setSidebarFilter: (f: 'all' | 'recent' | 'favorites') => void;
-  showTemplates: boolean;
-  templateFilter: string | null;
-  setShowTemplates: (show: boolean, filter?: string | null) => void;
-  createFromTemplate: (templateId: string) => void;
 
   // Dosya işlemleri
   createFile: (type: 'note' | 'spreadsheet') => void;
@@ -280,7 +217,73 @@ export const useAppStore = create<AppState>((set, get) => ({
   route: 'splash',
   setRoute: (r) => set({ route: r }),
 
-  files: [demoNote, demoSheet, demoNote2, demoPdf, demoExcel, demoWord, demoPpt, demoTxt, demoMd, demoImage],
+  homeTab: 'dashboard',
+  setHomeTab: (t) => set({ homeTab: t, route: 'home', activeFileId: null }),
+
+  currentUser: ME,
+
+  allMembers: demoMembers,
+  addMember: (m) => set(s => ({ allMembers: [...s.allMembers, m] })),
+  removeMember: (id) => set(s => ({
+    allMembers: s.allMembers.filter(m => m.id !== id),
+    teams: s.teams.map(t => ({ ...t, memberIds: t.memberIds.filter(mid => mid !== id) })),
+  })),
+
+  teams: demoTeams,
+  activeTeamId: 'team-is',
+  createTeam: (name) => {
+    const t: Team = { id: uid(), name, memberIds: [get().currentUser.id], createdAt: new Date().toISOString() };
+    set(s => ({ teams: [...s.teams, t], activeTeamId: t.id }));
+  },
+  deleteTeam: (id) => set(s => {
+    const teams = s.teams.filter(t => t.id !== id);
+    return { teams, activeTeamId: s.activeTeamId === id ? (teams[0]?.id ?? '') : s.activeTeamId };
+  }),
+  renameTeam: (id, name) => set(s => ({ teams: s.teams.map(t => t.id === id ? { ...t, name } : t) })),
+  setActiveTeam: (id) => set({ activeTeamId: id }),
+  addMemberToTeam: (teamId, memberId) => set(s => ({
+    teams: s.teams.map(t => t.id === teamId && !t.memberIds.includes(memberId) ? { ...t, memberIds: [...t.memberIds, memberId] } : t),
+  })),
+  removeMemberFromTeam: (teamId, memberId) => set(s => ({
+    teams: s.teams.map(t => t.id === teamId ? { ...t, memberIds: t.memberIds.filter(id => id !== memberId) } : t),
+  })),
+
+  // Computed: aktif ekip uyeleri
+  get team() {
+    const s = get();
+    const activeTeam = s.teams.find(t => t.id === s.activeTeamId);
+    if (!activeTeam) return s.allMembers;
+    return s.allMembers.filter(m => activeTeam.memberIds.includes(m.id));
+  },
+  addTeamMember: (m) => {
+    const s = get();
+    // Uye havuzda yoksa ekle
+    if (!s.allMembers.find(x => x.id === m.id)) {
+      set(st => ({ allMembers: [...st.allMembers, m] }));
+    }
+    // Aktif ekibe ekle
+    s.addMemberToTeam(s.activeTeamId, m.id);
+  },
+  removeTeamMember: (id) => {
+    const s = get();
+    s.removeMemberFromTeam(s.activeTeamId, id);
+  },
+
+  tasks: demoTasks,
+  addTask: (t) => set(s => ({ tasks: [t, ...s.tasks] })),
+  updateTask: (id, updates) => set(s => ({ tasks: s.tasks.map(t => t.id === id ? { ...t, ...updates } : t) })),
+  deleteTask: (id) => set(s => ({ tasks: s.tasks.filter(t => t.id !== id) })),
+
+  calendarEvents: [
+    { id: 'ce1', title: 'Istanbul teslimati', date: '2026-03-27', note: 'Depodan malzeme alinacak, Ahmet sofor', color: '#2563EB', createdAt: new Date().toISOString() },
+    { id: 'ce2', title: 'Musteri toplantisi', date: '2026-03-28', note: '', color: '#10B981', createdAt: new Date().toISOString() },
+    { id: 'ce3', title: 'Fatura son odeme', date: '2026-03-31', note: 'Elektrik + su faturalari', color: '#EF4444', createdAt: new Date().toISOString() },
+  ],
+  addCalendarEvent: (e) => set(s => ({ calendarEvents: [...s.calendarEvents, e] })),
+  updateCalendarEvent: (id, updates) => set(s => ({ calendarEvents: s.calendarEvents.map(e => e.id === id ? { ...e, ...updates } : e) })),
+  deleteCalendarEvent: (id) => set(s => ({ calendarEvents: s.calendarEvents.filter(e => e.id !== id) })),
+
+  files: [demoSheet, demoNote2, demoSheet3, demoNote, demoSheet2, demoNote3, demoNote4],
   activeFileId: null,
 
   focusedBlockId: null,
@@ -290,32 +293,6 @@ export const useAppStore = create<AppState>((set, get) => ({
   editValue: '',
   sidebarOpen: true,
   inspectorOpen: true,
-  sidebarFilter: 'all',
-  setSidebarFilter: (f) => set({ sidebarFilter: f }),
-  showTemplates: false,
-  templateFilter: null,
-  setShowTemplates: (show, filter = null) => set({ showTemplates: show, templateFilter: filter, route: 'home' as AppRoute, activeFileId: null }),
-
-  createFromTemplate: (templateId) => {
-    const tpl = TEMPLATES.find((t) => t.id === templateId);
-    if (!tpl) return;
-    if (tpl.type === 'spreadsheet') {
-      const sp = createSpreadsheet(tpl.title);
-      sp.icon = tpl.icon;
-      if (tpl.data) {
-        const sheet = sp.sheets[0];
-        for (const [k, v] of Object.entries(tpl.data)) {
-          sheet.cells[k] = { value: v.v, format: v.bold ? { bold: true, fillColor: v.fill } : undefined };
-        }
-      }
-      set((s) => ({ files: [sp, ...s.files], activeFileId: sp.id, route: 'editor' as AppRoute, showTemplates: false }));
-    } else {
-      const note = createNote(tpl.title);
-      note.icon = tpl.icon;
-      if (tpl.blocks) note.blocks = tpl.blocks.map((b) => createBlock(b.type, b.content, b.meta));
-      set((s) => ({ files: [note, ...s.files], activeFileId: note.id, route: 'editor' as AppRoute, showTemplates: false }));
-    }
-  },
 
   // ── Dosya ──
   createFile: (type) => {
@@ -340,8 +317,6 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   importFile: (name, content, ext) => {
     const title = name.replace(/\.[^.]+$/, '');
-
-    // Görsel dosyaları — data URL olarak image bloğuna ekle
     if (['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(ext)) {
       const note = createNote(title);
       note.icon = '🖼️';
@@ -349,8 +324,6 @@ export const useAppStore = create<AppState>((set, get) => ({
       set((s) => ({ files: [note, ...s.files], activeFileId: note.id, route: 'editor' as AppRoute }));
       return;
     }
-
-    // CSV → Spreadsheet olarak aç
     if (ext === 'csv') {
       const sp = createSpreadsheet(title);
       sp.icon = '📊';
@@ -365,8 +338,6 @@ export const useAppStore = create<AppState>((set, get) => ({
       set((s) => ({ files: [sp, ...s.files], activeFileId: sp.id, route: 'editor' as AppRoute }));
       return;
     }
-
-    // Metin dosyaları → Not olarak aç
     const note = createNote(title);
     const lines = content.split('\n').filter((l) => l.trim());
     if (lines.length > 0) {
@@ -384,7 +355,6 @@ export const useAppStore = create<AppState>((set, get) => ({
         return createBlock('text', t);
       });
     }
-
     const icons: Record<string, string> = { txt: '📝', md: '📑', doc: '📃', docx: '📃', rtf: '📃', pdf: '📕', xls: '📊', xlsx: '📊', ppt: '📙', pptx: '📙' };
     note.icon = icons[ext] ?? '📄';
     set((s) => ({ files: [note, ...s.files], activeFileId: note.id, route: 'editor' as AppRoute }));

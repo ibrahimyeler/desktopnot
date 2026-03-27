@@ -11,17 +11,31 @@ export default function Dashboard() {
 
   if (route === 'home' || !file) {
     return (
-      <div className="flex h-screen w-screen">
+      <div className="flex h-screen w-screen bg-[#F1F5F9]">
         <Sidebar />
         <Home />
       </div>
     );
   }
 
+  // Spreadsheet has its own header/toolbar built in
+  if (file.type === 'spreadsheet') {
+    return (
+      <div className="flex h-screen w-screen bg-[#F1F5F9]">
+        <Sidebar />
+        <SpreadsheetEditor />
+      </div>
+    );
+  }
+
+  // Notes use the shared EditorToolbar
   return (
-    <div className="flex flex-col h-screen w-screen">
-      <EditorToolbar />
-      {file.type === 'note' ? <NoteEditor /> : <SpreadsheetEditor />}
+    <div className="flex h-screen w-screen bg-[#F1F5F9]">
+      <Sidebar />
+      <div className="flex-1 flex flex-col min-w-0">
+        <EditorToolbar />
+        <NoteEditor />
+      </div>
     </div>
   );
 }

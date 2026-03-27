@@ -2,10 +2,10 @@ import { useRef, useState, useCallback, useEffect, useMemo } from 'react';
 import { useAppStore } from '../../store/useAppStore';
 import { colLabel, cellKey } from '../../types';
 
-const COL_W = 120;
-const ROW_H = 32;
-const HDR_H = 28;
-const ROW_HDR_W = 48;
+const COL_W = 140;
+const ROW_H = 36;
+const HDR_H = 34;
+const ROW_HDR_W = 52;
 const ROWS = 500;
 const COLS = 26;
 const OVER = 4;
@@ -15,13 +15,14 @@ export default function Grid() {
   const [scroll, setScroll] = useState({ top: 0, left: 0 });
   const [size, setSize] = useState({ w: 0, h: 0 });
   const [selecting, setSelecting] = useState(false);
+  const [hoverRow, setHoverRow] = useState<number | null>(null);
   const { activeCell, selection, isEditing, editValue, setActiveCell, setSelection, startEditing, stopEditing, setEditValue, setCellValue, getActiveSheet } = useAppStore();
   const sheet = getActiveSheet();
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const obs = new ResizeObserver((e) => { const { width, height } = e[0].contentRect; setSize({ w: width, h: height }); });
+    const obs = new ResizeObserver(e => { const { width, height } = e[0].contentRect; setSize({ w: width, h: height }); });
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
@@ -78,17 +79,30 @@ export default function Grid() {
   const isAct = (r: number, c: number) => activeCell?.row === r && activeCell?.col === c;
 
   return (
-    <div ref={ref} className="flex-1 overflow-auto relative bg-white" onScroll={onScroll}>
+    <div ref={ref} className="flex-1 overflow-auto relative bg-white" onScroll={onScroll} onMouseLeave={() => setHoverRow(null)}>
       <div style={{ width: totalW + ROW_HDR_W, height: totalH + HDR_H, position: 'relative' }}>
         {/* Corner */}
-        <div className="sticky top-0 left-0 z-30" style={{ width: ROW_HDR_W, height: HDR_H, position: 'absolute', background: '#F8FAFC', borderBottom: '1px solid #E2E8F0', borderRight: '1px solid #E2E8F0' }} />
+        <div className="sticky top-0 left-0 z-30" style={{
+          width: ROW_HDR_W, height: HDR_H, position: 'absolute',
+          background: '#F9FAFB', borderBottom: '1px solid #E5E7EB', borderRight: '1px solid #E5E7EB',
+        }} />
 
-        {/* Col headers */}
+        {/* Column headers */}
         <div className="sticky top-0 z-20" style={{ position: 'absolute', left: ROW_HDR_W, top: 0, height: HDR_H }}>
           {Array.from({ length: c1 - c0 + 1 }, (_, i) => {
             const c = c0 + i;
             const act = activeCell?.col === c;
-            return <div key={c} className="absolute top-0 flex items-center justify-center text-[11px] font-semibold select-none" style={{ left: colPos[c], width: colPos[c + 1] - colPos[c], height: HDR_H, background: act ? '#EFF6FF' : '#F8FAFC', color: act ? '#3B82F6' : '#64748B', borderBottom: '1px solid #E2E8F0', borderRight: '1px solid #F1F5F9' }}>{colLabel(c)}</div>;
+            return (
+              <div key={c} className="absolute top-0 flex items-center justify-center text-[11px] font-semibold select-none transition-colors duration-100" style={{
+                left: colPos[c], width: colPos[c + 1] - colPos[c], height: HDR_H,
+                background: act ? '#EFF6FF' : '#F9FAFB',
+                color: act ? '#3B82F6' : '#6B7280',
+                borderBottom: '1px solid #E5E7EB',
+                borderRight: '1px solid #F3F4F6',
+              }}>
+                {colLabel(c)}
+              </div>
+            );
           })}
         </div>
 
@@ -97,7 +111,18 @@ export default function Grid() {
           {Array.from({ length: r1 - r0 + 1 }, (_, i) => {
             const r = r0 + i;
             const act = activeCell?.row === r;
-            return <div key={r} className="absolute flex items-center justify-center text-[11px] font-semibold select-none" style={{ top: r * ROW_H, width: ROW_HDR_W, height: ROW_H, background: act ? '#EFF6FF' : '#F8FAFC', color: act ? '#3B82F6' : '#64748B', borderBottom: '1px solid #F1F5F9', borderRight: '1px solid #E2E8F0' }}>{r + 1}</div>;
+            const hover = hoverRow === r;
+            return (
+              <div key={r} className="absolute flex items-center justify-center text-[11px] font-medium select-none transition-colors duration-100" style={{
+                top: r * ROW_H, width: ROW_HDR_W, height: ROW_H,
+                background: act ? '#EFF6FF' : hover ? '#F9FAFB' : '#FAFAFA',
+                color: act ? '#3B82F6' : '#9CA3AF',
+                borderBottom: '1px solid #F3F4F6',
+                borderRight: '1px solid #E5E7EB',
+              }}>
+                {r + 1}
+              </div>
+            );
           })}
         </div>
 
@@ -111,22 +136,47 @@ export default function Grid() {
               const cd = sheet?.cells[k];
               const act = isAct(r, c);
               const sel = inSel(r, c) && !act;
+              const hover = hoverRow === r && !act && !sel;
               const f = cd?.format;
+
               return (
-                <div key={`${r}-${c}`} className="absolute select-none" style={{
+                <div key={`${r}-${c}`} className="absolute select-none transition-colors duration-100" style={{
                   left: colPos[c], top: r * ROW_H, width: colPos[c + 1] - colPos[c], height: ROW_H,
-                  background: act ? '#fff' : sel ? 'rgba(59,130,246,0.04)' : f?.fillColor ?? '#fff',
-                  borderBottom: '1px solid #F1F5F9', borderRight: '1px solid #F1F5F9',
-                  ...(act ? { zIndex: 10, boxShadow: '0 0 0 2px #3B82F6, 0 0 0 4px rgba(59,130,246,0.1)' } : {}),
-                  ...(sel ? { borderColor: 'rgba(59,130,246,0.12)' } : {}),
-                  borderRadius: act ? '2px' : undefined,
-                }} onMouseDown={(e) => mouseDown(r, c, e)} onMouseMove={() => mouseMove(r, c)} onDoubleClick={() => { setActiveCell({ row: r, col: c }); startEditing(); }}>
+                  background: act ? '#fff' : sel ? 'rgba(59,130,246,0.04)' : hover ? '#F9FAFB' : f?.fillColor ?? '#fff',
+                  borderBottom: '1px solid #F3F4F6',
+                  borderRight: '1px solid #F3F4F6',
+                  ...(act ? { zIndex: 10, boxShadow: '0 0 0 2px #3B82F6, 0 0 0 4px rgba(59,130,246,0.08)', borderRadius: '4px' } : {}),
+                  ...(sel ? { borderColor: 'rgba(59,130,246,0.1)' } : {}),
+                }}
+                  onMouseDown={e => mouseDown(r, c, e)}
+                  onMouseMove={() => { mouseMove(r, c); setHoverRow(r); }}
+                  onMouseEnter={() => setHoverRow(r)}
+                  onDoubleClick={() => { setActiveCell({ row: r, col: c }); startEditing(); }}
+                >
                   {act && isEditing ? (
-                    <input autoFocus type="text" value={editValue} onChange={(e) => setEditValue(e.target.value)}
-                      onKeyDown={(e) => { if (e.key === 'Enter') { stopEditing(true); setActiveCell({ row: r + 1, col: c }); } else if (e.key === 'Escape') stopEditing(false); else if (e.key === 'Tab') { e.preventDefault(); stopEditing(true); setActiveCell({ row: r, col: Math.min(c + 1, COLS - 1) }); } }}
-                      className="w-full h-full px-2 text-[12px] outline-none border-none bg-white font-mono" style={{ fontWeight: f?.bold ? 600 : undefined, fontStyle: f?.italic ? 'italic' : undefined, textDecoration: f?.underline ? 'underline' : undefined, textAlign: f?.align ?? 'left', color: f?.textColor ?? '#0F172A' }} spellCheck={false} />
+                    <input autoFocus type="text" value={editValue} onChange={e => setEditValue(e.target.value)}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') { stopEditing(true); setActiveCell({ row: r + 1, col: c }); }
+                        else if (e.key === 'Escape') stopEditing(false);
+                        else if (e.key === 'Tab') { e.preventDefault(); stopEditing(true); setActiveCell({ row: r, col: Math.min(c + 1, COLS - 1) }); }
+                      }}
+                      className="w-full h-full px-3 text-[13px] outline-none border-none bg-white"
+                      style={{
+                        fontWeight: f?.bold ? 600 : 400,
+                        fontStyle: f?.italic ? 'italic' : undefined,
+                        textDecoration: f?.underline ? 'underline' : undefined,
+                        textAlign: f?.align ?? 'left',
+                        color: f?.textColor ?? '#111827',
+                      }} spellCheck={false} />
                   ) : (
-                    <div className="w-full h-full px-2 flex items-center text-[12px] truncate" style={{ fontWeight: f?.bold ? 600 : undefined, fontStyle: f?.italic ? 'italic' : undefined, textDecoration: f?.underline ? 'underline' : undefined, textAlign: f?.align ?? 'left', justifyContent: f?.align === 'center' ? 'center' : f?.align === 'right' ? 'flex-end' : 'flex-start', color: f?.textColor ?? '#0F172A' }}>
+                    <div className="w-full h-full px-3 flex items-center text-[13px] truncate" style={{
+                      fontWeight: f?.bold ? 600 : 400,
+                      fontStyle: f?.italic ? 'italic' : undefined,
+                      textDecoration: f?.underline ? 'underline' : undefined,
+                      textAlign: f?.align ?? 'left',
+                      justifyContent: f?.align === 'center' ? 'center' : f?.align === 'right' ? 'flex-end' : 'flex-start',
+                      color: f?.textColor ?? '#111827',
+                    }}>
                       {cd?.value ?? ''}
                     </div>
                   )}
@@ -141,7 +191,7 @@ export default function Grid() {
           <div className="absolute pointer-events-none z-10" style={{
             left: ROW_HDR_W + colPos[sel0.col], top: HDR_H + sel0.row * ROW_H,
             width: colPos[sel1.col + 1] - colPos[sel0.col], height: (sel1.row - sel0.row + 1) * ROW_H,
-            border: '2px solid #3B82F6', borderRadius: '3px', boxShadow: '0 0 0 3px rgba(59,130,246,0.08)',
+            border: '2px solid #3B82F6', borderRadius: '4px', boxShadow: '0 0 0 3px rgba(59,130,246,0.06)',
           }}>
             <div className="absolute -right-[4px] -bottom-[4px] w-2.5 h-2.5 rounded-full bg-[#3B82F6] border-2 border-white cursor-crosshair shadow-sm" />
           </div>

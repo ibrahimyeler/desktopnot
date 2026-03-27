@@ -1,7 +1,54 @@
 // ── Dosya Tipleri ──
 export type FileType = 'note' | 'spreadsheet';
-export type AppRoute = 'splash' | 'home' | 'editor';
+export type AppRoute = 'splash' | 'login' | 'forgot-password' | 'register' | 'home' | 'editor';
+export type HomeTab = 'dashboard' | 'tasks' | 'team' | 'files' | 'templates' | 'calendar';
 
+// ── Görev Sistemi ──
+export type TaskStatus = 'pending' | 'in_progress' | 'completed';
+export type TaskPriority = 'low' | 'medium' | 'high';
+
+export interface Task {
+  id: string;
+  title: string;
+  description: string;
+  status: TaskStatus;
+  priority: TaskPriority;
+  assignedTo: string; // TeamMember id
+  assignedBy: string; // TeamMember id
+  dueDate: string;
+  note: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ── Ekip ──
+export interface TeamMember {
+  id: string;
+  username: string; // benzersiz kullanici adi
+  name: string;
+  role: string;
+  avatar: string; // initials color
+  isOnline: boolean;
+}
+
+export interface Team {
+  id: string;
+  name: string;
+  memberIds: string[]; // TeamMember id listesi
+  createdAt: string;
+}
+
+// ── Takvim ──
+export interface CalendarEvent {
+  id: string;
+  title: string;
+  date: string; // YYYY-MM-DD
+  note: string;
+  color: string;
+  createdAt: string;
+}
+
+// ── Dosya ──
 export interface FileItem {
   id: string;
   type: FileType;
@@ -79,4 +126,12 @@ export function createNote(title = 'Başlıksız Not'): NoteFile {
 export function createSpreadsheet(title = 'Başlıksız Tablo'): SpreadsheetFile {
   const sh: Sheet = { id: uid(), name: 'Sayfa 1', cells: {}, colWidths: {} };
   return { id: uid(), type: 'spreadsheet', title, icon: '📊', sheets: [sh], activeSheetId: sh.id, updatedAt: new Date().toISOString(), createdAt: new Date().toISOString(), isFavorite: false };
+}
+
+export function createTask(title: string, assignedTo: string, assignedBy: string, priority: TaskPriority = 'medium'): Task {
+  return {
+    id: uid(), title, description: '', status: 'pending', priority,
+    assignedTo, assignedBy,
+    dueDate: '', note: '', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+  };
 }
