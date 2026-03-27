@@ -92,7 +92,7 @@ demoNote4.blocks = [
 ];
 
 // Demo ekip
-const ME: TeamMember = { id: 'me', username: 'ibrahimyeler', name: 'Ibrahim Yeler', role: 'Yonetici', avatar: '#007AFF', isOnline: true };
+const ME: TeamMember = { id: 'me', username: 'fampa', name: 'Fampa', role: 'Yonetici', avatar: '#007AFF', isOnline: true };
 const demoMembers: TeamMember[] = [
   ME,
   { id: 'driver1', username: 'ahmetkaya', name: 'Ahmet Kaya', role: 'Sofor', avatar: '#34C759', isOnline: true },

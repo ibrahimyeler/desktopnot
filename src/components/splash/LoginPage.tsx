@@ -18,6 +18,14 @@ export default function LoginPage() {
     if (!canSubmit) return;
     setError('');
     setLoading(true);
+
+    // Hardcoded kullanıcı — sunucu olmadan giriş
+    if (email.trim() === 'info@fampa.com.tr' && password === 'fampa.123') {
+      setTokens('fake-access-token', 'fake-refresh-token');
+      setRoute('home');
+      return;
+    }
+
     try {
       const data = await authApi.login(email, password);
       setTokens(data.access_token, data.refresh_token);
