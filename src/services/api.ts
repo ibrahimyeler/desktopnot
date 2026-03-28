@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8080/api';
+const API_URL = 'http://72.61.155.171:9090/api';
 
 // ── Token Management ──
 let accessToken: string | null = localStorage.getItem('access_token');
@@ -102,6 +102,79 @@ export interface AuthResponse {
   refresh_token: string;
 }
 
+// ── File Types ──
+export interface ApiFile {
+  id: string;
+  user_id: string;
+  type: string;
+  title: string;
+  icon: string;
+  is_favorite: boolean;
+  content: any;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FileListResponse {
+  files: ApiFile[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+// ── Task Types ──
+export interface ApiTask {
+  id: string;
+  user_id: string;
+  title: string;
+  description: string;
+  status: string;
+  priority: string;
+  assigned_to: string | null;
+  assigned_by: string | null;
+  due_date: string | null;
+  note: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TaskListResponse {
+  tasks: ApiTask[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+// ── Calendar Types ──
+export interface ApiCalendarEvent {
+  id: string;
+  user_id: string;
+  title: string;
+  date: string;
+  note: string;
+  color: string;
+  created_at: string;
+  updated_at: string;
+}
+
+// ── Team Types ──
+export interface ApiTeamMember {
+  user_id: string;
+  name: string;
+  email: string;
+  avatar_url: string;
+  role: string;
+}
+
+export interface ApiTeam {
+  id: string;
+  owner_id: string;
+  name: string;
+  members: ApiTeamMember[];
+  created_at: string;
+  updated_at: string;
+}
+
 // ── Auth API ──
 export const authApi = {
   login: (email: string, password: string) =>
@@ -135,4 +208,94 @@ export const authApi = {
       method: 'POST',
       body: JSON.stringify({ refresh_token: refreshToken }),
     }),
+
+  changePassword: (currentPassword: string, newPassword: string) =>
+    request<{ message: string }>('/auth/change-password', {
+      method: 'POST',
+      body: JSON.stringify({ current_password: currentPassword, new_password: newPassword }),
+    }),
+};
+
+// ── Files API ──
+export const filesApi = {
+  list: (params?: Record<string, string>) => {
+    const q = params ? '?' + new URLSearchParams(params).toString() : '';
+    return request<FileListResponse>(`/files${q}`);
+  },
+  get: (id: string) => request<ApiFile>(`/files/${id}`),
+  create: (data: { type: string; title?: string; icon?: string; content?: any }) =>
+    request<ApiFile>('/files', { method: 'POST', body: JSON.stringify(data) }),
+  update: (id: string, data: { title?: string; icon?: string; is_favorite?: boolean; content?: any }) =>
+    request<ApiFile>(`/files/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+  delete: (id: string) =>
+    request<{ message: string }>(`/files/${id}`, { method: 'DELETE' }),
+  toggleFavorite: (id: string) =>
+    request<ApiFile>(`/files/${id}/favorite`, { method: 'POST' }),
+};
+
+// ── Tasks API ──
+export const tasksApi = {
+  list: (params?: Record<string, string>) => {
+    const q = params ? '?' + new URLSearchParams(params).toString() : '';
+    return request<TaskListResponse>(`/tasks${q}`);
+  },
+  get: (id: string) => request<ApiTask>(`/tasks/${id}`),
+  create: (data: { title: string; description?: string; status?: string; priority?: string; assigned_to?: string; due_date?: string; note?: string }) =>
+    request<ApiTask>('/tasks', { method: 'POST', body: JSON.stringify(data) }),
+  update: (id: string, data: { title?: string; description?: string; status?: string; priority?: string; assigned_to?: string; due_date?: string; note?: string }) =>
+    request<ApiTask>(`/tasks/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+  delete: (id: string) =>
+    request<{ message: string }>(`/tasks/${id}`, { method: 'DELETE' }),
+};
+
+// ── Calendar API ──
+export const calendarApi = {
+  list: (params?: Record<string, string>) => {
+    const q = params ? '?' + new URLSearchParams(params).toString() : '';
+    return request<{ events: ApiCalendarEvent[]; total: number }>(`/calendar${q}`);
+  },
+  get: (id: string) => request<ApiCalendarEvent>(`/calendar/${id}`),
+  create: (data: { title: string; date: string; note?: string; color?: string }) =>
+    request<ApiCalendarEvent>('/calendar', { method: 'POST', body: JSON.stringify(data) }),
+  update: (id: string, data: { title?: string; date?: string; note?: string; color?: string }) =>
+    request<ApiCalendarEvent>(`/calendar/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+  delete: (id: string) =>
+    request<{ message: string }>(`/calendar/${id}`, { method: 'DELETE' }),
+};
+
+// ── Teams API ──
+export const teamsApi = {
+  list: () => request<{ teams: ApiTeam[] }>('/teams'),
+  get: (id: string) => request<ApiTeam>(`/teams/${id}`),
+  create: (name: string) =>
+    request<ApiTeam>('/teams', { method: 'POST', body: JSON.stringify({ name }) }),
+  update: (id: string, name: string) =>
+    request<ApiTeam>(`/teams/${id}`, { method: 'PATCH', body: JSON.stringify({ name }) }),
+  delete: (id: string) =>
+    request<{ message: string }>(`/teams/${id}`, { method: 'DELETE' }),
+  addMember: (teamId: string, userId: string, role?: string) =>
+    request<{ message: string; members: ApiTeamMember[] }>(`/teams/${teamId}/members`, {
+      method: 'POST', body: JSON.stringify({ user_id: userId, role: role || 'member' }),
+    }),
+  removeMember: (teamId: string, userId: string) =>
+    request<{ message: string; members: ApiTeamMember[] }>(`/teams/${teamId}/members/${userId}`, { method: 'DELETE' }),
+};
+
+// ── Admin API ──
+export const adminApi = {
+  stats: () => request<{ total_users: number; total_files: number; pending_approvals: number }>('/admin/stats'),
+  listUsers: (params?: Record<string, string>) => {
+    const q = params ? '?' + new URLSearchParams(params).toString() : '';
+    return request<{ users: ApiUser[]; total: number; page: number; limit: number }>(`/admin/users${q}`);
+  },
+  listPendingUsers: () =>
+    request<{ users: ApiUser[]; total: number }>('/admin/users/pending'),
+  approveUser: (id: string) =>
+    request<{ message: string; user: ApiUser }>(`/admin/users/${id}/approve`, { method: 'PATCH' }),
+  rejectUser: (id: string) =>
+    request<{ message: string }>(`/admin/users/${id}/reject`, { method: 'PATCH' }),
+  deleteUser: (id: string) =>
+    request<{ message: string }>(`/admin/users/${id}`, { method: 'DELETE' }),
+  updateRole: (id: string, role: string) =>
+    request<ApiUser>(`/admin/users/${id}/role`, { method: 'PATCH', body: JSON.stringify({ role }) }),
 };

@@ -1,4 +1,5 @@
 import { FileText, Table2, Star, Trash2, Search, Plus, Clock, CheckCircle2, Circle, UserPlus, ChevronRight, ExternalLink, ArrowUpDown, List, Columns3, ChevronDown, Calendar, Bell, Zap, AlertTriangle, Flame, Timer, CalendarClock, TrendingUp, Sparkles, X, StickyNote, Target, Users, MoreHorizontal, LayoutGrid as GridIcon, LayoutList, Copy } from 'lucide-react';
+import UsersView from './UsersView';
 import type { NoteFile, SpreadsheetFile } from '../../types';
 import { useAppStore } from '../../store/useAppStore';
 import { useState, useMemo, useRef } from 'react';
@@ -2171,6 +2172,7 @@ export default function Home() {
       {homeTab === 'team' && <TeamView />}
       {homeTab === 'files' && <FilesView />}
       {homeTab === 'calendar' && <CalendarView />}
+      {homeTab === 'users' && <UsersView />}
     </div>
   );
 }

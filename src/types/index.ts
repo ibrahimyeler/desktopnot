@@ -1,7 +1,7 @@
 // ── Dosya Tipleri ──
 export type FileType = 'note' | 'spreadsheet';
 export type AppRoute = 'splash' | 'login' | 'forgot-password' | 'register' | 'home' | 'editor';
-export type HomeTab = 'dashboard' | 'tasks' | 'team' | 'files' | 'templates' | 'calendar';
+export type HomeTab = 'dashboard' | 'tasks' | 'team' | 'files' | 'templates' | 'calendar' | 'users';
 
 // ── Görev Sistemi ──
 export type TaskStatus = 'pending' | 'in_progress' | 'completed';

@@ -1,6 +1,7 @@
-import { LayoutGrid, CheckSquare, Table2, Users, Plus, LogOut, ChevronDown, Briefcase, Check, Settings } from 'lucide-react';
+import { LayoutGrid, CheckSquare, Table2, Users, Plus, LogOut, ChevronDown, Briefcase, Check, Settings, Shield, X, Lock, Eye, EyeOff, Loader2, CheckCircle2 } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import { useState } from 'react';
+import { authApi, ApiError } from '../../services/api';
 import type { HomeTab } from '../../types';
 
 const NAV: { id: HomeTab; label: string; icon: typeof LayoutGrid }[] = [
@@ -10,11 +11,161 @@ const NAV: { id: HomeTab; label: string; icon: typeof LayoutGrid }[] = [
   { id: 'team', label: 'Ekip', icon: Users },
 ];
 
+// ── Sifre Degistirme Modali ──
+function ChangePasswordModal({ onClose }: { onClose: () => void }) {
+  const [currentPass, setCurrentPass] = useState('');
+  const [newPass, setNewPass] = useState('');
+  const [confirmPass, setConfirmPass] = useState('');
+  const [showCurrent, setShowCurrent] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const canSubmit = currentPass.trim() && newPass.trim().length >= 6 && newPass === confirmPass && !loading;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!canSubmit) return;
+    setError('');
+    setLoading(true);
+    try {
+      await authApi.changePassword(currentPass, newPass);
+      setSuccess(true);
+      setTimeout(() => onClose(), 1500);
+    } catch (err) {
+      if (err instanceof ApiError) {
+        if (err.status === 401) setError('Mevcut sifre hatali.');
+        else setError(err.message);
+      } else {
+        setError('Baglanti hatasi. Tekrar deneyin.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <div className="fixed inset-0 bg-black/50 z-[200]" onClick={onClose} />
+      <div className="fixed inset-0 z-[201] flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-[400px] overflow-hidden" onClick={e => e.stopPropagation()}>
+          {/* Header */}
+          <div className="flex items-center justify-between px-6 py-4 border-b border-[#F1F5F9]">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-[#06B6D4]/10 flex items-center justify-center">
+                <Lock size={15} className="text-[#06B6D4]" />
+              </div>
+              <span className="text-[15px] font-bold text-[#0F172A]">Sifre Degistir</span>
+            </div>
+            <button onClick={onClose} className="w-7 h-7 flex items-center justify-center rounded-lg text-[#94A3B8] hover:text-[#64748B] hover:bg-[#F1F5F9] transition-colors cursor-pointer">
+              <X size={15} />
+            </button>
+          </div>
+
+          {/* Body */}
+          <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
+            {success ? (
+              <div className="flex flex-col items-center py-6">
+                <div className="w-12 h-12 rounded-full bg-[#DCFCE7] flex items-center justify-center mb-3">
+                  <CheckCircle2 size={24} className="text-[#16A34A]" />
+                </div>
+                <p className="text-[14px] font-semibold text-[#0F172A]">Sifre basariyla guncellendi</p>
+              </div>
+            ) : (
+              <>
+                {error && (
+                  <div className="px-3.5 py-2.5 bg-[#FEF2F2] border border-[#FECACA] rounded-xl text-[12px] text-[#DC2626]">{error}</div>
+                )}
+
+                {/* Mevcut Sifre */}
+                <div>
+                  <label className="text-[12px] font-semibold text-[#374151] mb-1.5 block">Mevcut Sifre</label>
+                  <div className="relative">
+                    <input
+                      type={showCurrent ? 'text' : 'password'}
+                      value={currentPass}
+                      onChange={e => setCurrentPass(e.target.value)}
+                      placeholder="Mevcut sifreniz"
+                      className="w-full h-10 px-3.5 pr-10 bg-white border border-[#E2E8F0] rounded-xl text-[13px] text-[#0F172A] outline-none placeholder:text-[#CBD5E1] focus:border-[#06B6D4] focus:ring-2 focus:ring-[#06B6D4]/10 transition-all"
+                    />
+                    <button type="button" onClick={() => setShowCurrent(!showCurrent)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8] hover:text-[#64748B] cursor-pointer">
+                      {showCurrent ? <EyeOff size={14} /> : <Eye size={14} />}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Yeni Sifre */}
+                <div>
+                  <label className="text-[12px] font-semibold text-[#374151] mb-1.5 block">Yeni Sifre</label>
+                  <div className="relative">
+                    <input
+                      type={showNew ? 'text' : 'password'}
+                      value={newPass}
+                      onChange={e => setNewPass(e.target.value)}
+                      placeholder="En az 6 karakter"
+                      className="w-full h-10 px-3.5 pr-10 bg-white border border-[#E2E8F0] rounded-xl text-[13px] text-[#0F172A] outline-none placeholder:text-[#CBD5E1] focus:border-[#06B6D4] focus:ring-2 focus:ring-[#06B6D4]/10 transition-all"
+                    />
+                    <button type="button" onClick={() => setShowNew(!showNew)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8] hover:text-[#64748B] cursor-pointer">
+                      {showNew ? <EyeOff size={14} /> : <Eye size={14} />}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Sifre Tekrar */}
+                <div>
+                  <label className="text-[12px] font-semibold text-[#374151] mb-1.5 block">Yeni Sifre (Tekrar)</label>
+                  <input
+                    type="password"
+                    value={confirmPass}
+                    onChange={e => setConfirmPass(e.target.value)}
+                    placeholder="Yeni sifrenizi tekrar girin"
+                    className={`w-full h-10 px-3.5 bg-white border rounded-xl text-[13px] text-[#0F172A] outline-none placeholder:text-[#CBD5E1] focus:ring-2 transition-all ${
+                      confirmPass && confirmPass !== newPass
+                        ? 'border-[#EF4444] focus:border-[#EF4444] focus:ring-[#EF4444]/10'
+                        : 'border-[#E2E8F0] focus:border-[#06B6D4] focus:ring-[#06B6D4]/10'
+                    }`}
+                  />
+                  {confirmPass && confirmPass !== newPass && (
+                    <p className="text-[11px] text-[#EF4444] mt-1">Sifreler eslesmiyor</p>
+                  )}
+                </div>
+
+                {/* Buttons */}
+                <div className="flex gap-2 pt-2">
+                  <button type="button" onClick={onClose}
+                    className="flex-1 py-2.5 text-[13px] font-semibold text-[#64748B] bg-[#F1F5F9] rounded-xl hover:bg-[#E2E8F0] transition-colors cursor-pointer">
+                    Vazgec
+                  </button>
+                  <button type="submit" disabled={!canSubmit}
+                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-[13px] font-bold transition-all cursor-pointer ${
+                      canSubmit
+                        ? 'text-white shadow-lg shadow-cyan-500/25 hover:brightness-110'
+                        : 'bg-[#E2E8F0] text-[#94A3B8] cursor-not-allowed'
+                    }`}
+                    style={canSubmit ? { background: 'linear-gradient(135deg, #06B6D4, #0891B2)' } : undefined}>
+                    {loading && <Loader2 size={14} className="animate-spin" />}
+                    {loading ? 'Kaydediliyor...' : 'Sifreyi Guncelle'}
+                  </button>
+                </div>
+              </>
+            )}
+          </form>
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ── Sidebar ──
 export default function Sidebar() {
-  const { sidebarOpen, homeTab, setHomeTab, setRoute, currentUser, tasks, team, teams, activeTeamId, setActiveTeam, createTeam } = useAppStore();
+  const { sidebarOpen, homeTab, setHomeTab, setRoute, currentUser, tasks, team, teams, activeTeamId, setActiveTeam, createTeam, user, logout } = useAppStore();
   const [showTeamDropdown, setShowTeamDropdown] = useState(false);
   const [newTeamName, setNewTeamName] = useState('');
   const [showNewTeam, setShowNewTeam] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   if (!sidebarOpen) return null;
 
@@ -142,6 +293,24 @@ export default function Sidebar() {
           );
         })}
 
+        {/* Admin — Kullanicilar */}
+        {user?.role === 'admin' && (
+          <>
+            <div className="px-3 mt-5 mb-2.5 text-[10px] font-bold text-[#67E8F9]/60 uppercase tracking-[0.12em]">Yonetim</div>
+            <button
+              onClick={() => { setHomeTab('users'); setRoute('home'); }}
+              className={`w-full flex items-center gap-2.5 px-3 py-[10px] rounded-xl text-[13px] transition-all duration-150 cursor-pointer relative
+                ${homeTab === 'users'
+                  ? 'bg-white/[0.12] text-white font-semibold'
+                  : 'text-[#CBD5E1] hover:bg-white/[0.06] hover:text-white'}`}
+            >
+              {homeTab === 'users' && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-[#06B6D4] rounded-r-full shadow-lg shadow-cyan-500/30" />}
+              <Shield size={17} strokeWidth={homeTab === 'users' ? 2.2 : 1.5} />
+              <span className="flex-1 text-left">Kullanicilar</span>
+            </button>
+          </>
+        )}
+
         {/* Hizli Olustur */}
         <div className="pt-5 mt-4 border-t border-white/[0.08]">
           <div className="px-3 mb-2.5 text-[10px] font-bold text-[#67E8F9]/60 uppercase tracking-[0.12em]">Hizli Olustur</div>
@@ -165,19 +334,23 @@ export default function Sidebar() {
       {/* Footer */}
       <div className="px-3 py-3 border-t border-white/[0.08] space-y-0.5">
         <button
+          onClick={() => setShowSettings(true)}
           className="w-full flex items-center gap-2.5 px-3 py-[8px] rounded-xl text-[13px] text-[#CBD5E1]/70 hover:bg-white/[0.06] hover:text-white transition-all duration-150 cursor-pointer"
         >
           <Settings size={15} />
           <span>Ayarlar</span>
         </button>
         <button
-          onClick={() => setRoute('splash')}
+          onClick={() => logout()}
           className="w-full flex items-center gap-2.5 px-3 py-[8px] rounded-xl text-[13px] text-[#F87171] hover:bg-[#EF4444]/10 hover:text-[#EF4444] transition-all duration-150 cursor-pointer"
         >
           <LogOut size={15} />
           <span>Cikis Yap</span>
         </button>
       </div>
+
+      {/* Sifre Degistirme Modali */}
+      {showSettings && <ChangePasswordModal onClose={() => setShowSettings(false)} />}
     </div>
   );
 }

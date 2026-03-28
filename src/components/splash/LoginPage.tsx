@@ -19,16 +19,26 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
 
-    // Hardcoded kullanıcı — sunucu olmadan giriş
-    if (email.trim() === 'info@fampa.com.tr' && password === 'fampa.123') {
-      setTokens('fake-access-token', 'fake-refresh-token');
-      setRoute('home');
-      return;
-    }
-
     try {
       const data = await authApi.login(email, password);
       setTokens(data.access_token, data.refresh_token);
+
+      // Store user in Zustand
+      const store = useAppStore.getState();
+      store.setUser(data.user);
+      useAppStore.setState({
+        currentUser: {
+          id: data.user.id,
+          username: data.user.email.split('@')[0],
+          name: data.user.name,
+          role: data.user.role,
+          avatar: '#06B6D4',
+          isOnline: true,
+        },
+      });
+
+      // Load all data from backend
+      await store.loadData();
       setRoute('home');
     } catch (err) {
       if (err instanceof ApiError) {
@@ -112,7 +122,7 @@ export default function LoginPage() {
                 <input type="checkbox" className="w-3.5 h-3.5 rounded accent-[#06B6D4]" />
                 <span className="text-[12px] text-[#64748B]">Beni hatırla</span>
               </label>
-              <span onClick={() => setRoute('forgot-password')} className="text-[12px] text-[#06B6D4] font-semibold hover:text-[#0891B2] cursor-pointer transition-colors">Şifremi unuttum</span>
+              {/* <span onClick={() => setRoute('forgot-password')} className="text-[12px] text-[#06B6D4] font-semibold hover:text-[#0891B2] cursor-pointer transition-colors">Sifremi unuttum</span> */}
             </div>
 
             <button type="submit" disabled={!canSubmit}
