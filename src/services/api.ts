@@ -1,3 +1,5 @@
+import { fetch as tauriFetch } from '@tauri-apps/plugin-http';
+
 const API_URL = 'http://72.61.155.171:9090/api';
 
 // ── Token Management ──
@@ -33,7 +35,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     headers['Authorization'] = `Bearer ${accessToken}`;
   }
 
-  const res = await fetch(`${API_URL}${path}`, { ...options, headers });
+  const res = await tauriFetch(`${API_URL}${path}`, { ...options, headers });
 
   // Token expired — try refresh
   if (res.status === 401 && refreshToken) {
@@ -61,7 +63,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 
 async function tryRefresh(): Promise<boolean> {
   try {
-    const res = await fetch(`${API_URL}/auth/refresh`, {
+    const res = await tauriFetch(`${API_URL}/auth/refresh`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ refresh_token: refreshToken }),
