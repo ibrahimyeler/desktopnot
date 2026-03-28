@@ -25,7 +25,7 @@ export default function SplashPage() {
             {/* Badge */}
             <div className="anim-fade-up inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#ECFEFF] border border-[#A5F3FC] mb-6">
               <span className="w-1.5 h-1.5 rounded-full bg-[#06B6D4] animate-pulse" />
-              <span className="text-[11px] font-semibold text-[#0E7490] tracking-wide">Kurumsal çalışma platformu</span>
+              <span className="text-[11px] font-semibold text-[#0E7490] tracking-wide">Yeni surum — v1.2.1</span>
             </div>
 
             <h1 className="anim-fade-up-d1 text-[48px] font-extrabold text-[#0F172A] leading-[1.06] tracking-[-0.03em] mb-5">
@@ -156,7 +156,7 @@ export default function SplashPage() {
 
       {/* Footer */}
       <div className="flex items-center justify-between px-10 h-[44px] text-[11px] text-[#94A3B8] shrink-0">
-        <span>© 2026 NotApp. Tüm hakları saklıdır. — v1.1.2</span>
+        <span>© 2026 NotApp. Tum haklari saklidir. — v1.2.1</span>
         <div className="flex gap-4">
           <span className="hover:text-[#64748B] cursor-pointer transition-colors">Gizlilik</span>
           <span className="hover:text-[#64748B] cursor-pointer transition-colors">Kullanım Şartları</span>
