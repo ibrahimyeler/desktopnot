@@ -41,12 +41,13 @@ export default function LoginPage() {
       await store.loadData();
       setRoute('home');
     } catch (err) {
+      console.error('Login error:', err);
       if (err instanceof ApiError) {
         if (err.status === 403) setError('Hesabınız henüz onaylanmamış. Lütfen yönetici onayını bekleyin.');
         else if (err.status === 401) setError('E-posta veya şifre hatalı.');
         else setError(err.message);
       } else {
-        setError('Sunucuya bağlanılamadı. Lütfen tekrar deneyin.');
+        setError(`Sunucuya baglanamadi: ${err instanceof Error ? err.message : String(err)}`);
       }
     } finally {
       setLoading(false);
