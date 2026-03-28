@@ -1,4 +1,4 @@
-import { FileText, Table2, Star, Trash2, Search, Plus, Clock, CheckCircle2, Circle, UserPlus, ChevronRight, ExternalLink, ArrowUpDown, List, Columns3, ChevronDown, Calendar, Bell, Zap, AlertTriangle, Flame, Timer, CalendarClock, TrendingUp, Sparkles, X, StickyNote, Target, Users, MoreHorizontal, LayoutGrid as GridIcon, LayoutList, Copy } from 'lucide-react';
+import { FileText, Table2, Star, Trash2, Search, Plus, Clock, CheckCircle2, Circle, UserPlus, ChevronRight, ExternalLink, ArrowUpDown, List, Columns3, ChevronDown, Calendar, Bell, Zap, AlertTriangle, Flame, Timer, CalendarClock, TrendingUp, Sparkles, X, StickyNote, Target, Users, MoreHorizontal, LayoutGrid as GridIcon, LayoutList } from 'lucide-react';
 import UsersView from './UsersView';
 import type { NoteFile, SpreadsheetFile } from '../../types';
 import { useAppStore } from '../../store/useAppStore';
@@ -1054,7 +1054,7 @@ function KanbanView({ tasks, onOpenDetail }: { tasks: Task[]; onOpenDetail: (id:
 // EKİP — Coklu Ekip + Username (v3)
 // ══════════════════════════════════════
 function TeamView() {
-  const { team, addTeamMember, removeTeamMember, currentUser, tasks, teams, activeTeamId, setActiveTeam, createTeam, deleteTeam, renameTeam, allMembers, addMemberToTeam } = useAppStore();
+  const { team, addTeamMember, removeTeamMember, currentUser, tasks, teams, activeTeamId, setActiveTeam, deleteTeam, renameTeam, allMembers, addMemberToTeam } = useAppStore();
   const [showAdd, setShowAdd] = useState(false);
   const [addMode, setAddMode] = useState<'new' | 'existing'>('new');
   const [name, setName] = useState('');

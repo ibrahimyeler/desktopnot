@@ -1,6 +1,6 @@
-import { ArrowLeft, Plus, Filter, ArrowUpDown, Search, Columns3, List, Copy, Trash2, Download, MoreHorizontal, Star, ChevronDown, X, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Paintbrush, Highlighter, Type } from 'lucide-react';
+import { ArrowLeft, Plus, Filter, ArrowUpDown, Copy, Download, MoreHorizontal, Star, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Paintbrush, Highlighter } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
-import { useState, useRef, useEffect, useContext, createContext } from 'react';
+import { useState } from 'react';
 import { colLabel } from '../../types';
 import Grid from './Grid';
 import SheetTabs from './SheetTabs';
@@ -12,7 +12,6 @@ export default function SpreadsheetEditor() {
   const { getActiveSpreadsheet, getActiveSheet, updateFileTitle, toggleFavorite, goHome, activeCell, getCell, setCellFormat, isEditing, editValue, setEditValue, startEditing, stopEditing } = useAppStore();
   const sp = getActiveSpreadsheet();
   const sheet = getActiveSheet();
-  const [searchOpen, setSearchOpen] = useState(false);
   const [openDrop, setOpenDrop] = useState<string | null>(null);
 
   if (!sp) return null;

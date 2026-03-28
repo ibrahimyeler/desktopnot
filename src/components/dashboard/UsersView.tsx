@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Shield, UserCheck, UserX, Trash2, Loader2, Users, Clock, CheckCircle2 } from 'lucide-react';
-import { adminApi, ApiUser } from '../../services/api';
+import type { ApiUser } from '../../services/api';
+import { adminApi } from '../../services/api';
 
 type Tab = 'all' | 'pending';
 

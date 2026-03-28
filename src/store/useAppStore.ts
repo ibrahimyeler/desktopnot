@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import type { AnyFile, NoteFile, SpreadsheetFile, Block, BlockType, CellData, CellFormat, Sheet, AppRoute, HomeTab, Task, TeamMember, Team, CalendarEvent } from '../types';
 import { uid, cellKey, createBlock, createNote, createSpreadsheet } from '../types';
-import { ApiUser, ApiFile, ApiTask, ApiCalendarEvent, ApiTeam, filesApi, tasksApi, calendarApi, teamsApi, clearTokens } from '../services/api';
+import type { ApiUser, ApiFile, ApiTask, ApiCalendarEvent, ApiTeam } from '../services/api';
+import { filesApi, tasksApi, calendarApi, teamsApi, clearTokens } from '../services/api';
 
 // ── API ↔ Local type mappers ──
 
