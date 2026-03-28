@@ -1,7 +1,7 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "NotApp",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "identifier": "com.notapp.desktop",
   "build": {
     "frontendDist": "../dist",
@@ -23,7 +23,7 @@
       }
     ],
     "security": {
-      "csp": null
+      "csp": "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; connect-src 'self' http://72.61.155.171:* https://api.github.com https://github.com tauri:; img-src 'self' data: blob: https:; font-src 'self' data:;"
     }
   },
   "bundle": {
