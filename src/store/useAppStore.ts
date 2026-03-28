@@ -1,117 +1,9 @@
 import { create } from 'zustand';
 import type { AnyFile, NoteFile, SpreadsheetFile, Block, BlockType, CellData, CellFormat, Sheet, AppRoute, HomeTab, Task, TeamMember, Team, CalendarEvent } from '../types';
-import { uid, cellKey, createBlock, createNote, createSpreadsheet, createTask } from '../types';
+import { uid, cellKey, createBlock, createNote, createSpreadsheet } from '../types';
 
-// ── Demo Veriler ──
-const demoNote = createNote('Proje Notları');
-demoNote.icon = '📝';
-demoNote.blocks = [
-  createBlock('heading1', 'Proje Planı'),
-  createBlock('text', 'Bu belge proje ile ilgili notları içerir.'),
-  createBlock('heading2', 'Yapılacaklar'),
-  createBlock('checklist', 'Tasarım taslağını tamamla', { checked: true }),
-  createBlock('checklist', 'Backend API entegrasyonu', { checked: false }),
-  createBlock('checklist', 'Test senaryolarını yaz', { checked: false }),
-  createBlock('divider'),
-  createBlock('heading2', 'Notlar'),
-  createBlock('bulletList', 'Toplantı her Pazartesi 10:00'),
-  createBlock('bulletList', 'Sprint süresi 2 hafta'),
-  createBlock('quote', 'İyi yazılım, iyi planlama ile başlar.'),
-  createBlock('text', ''),
-];
-
-const demoSheet = createSpreadsheet('Urun Envanter Tablosu');
-demoSheet.icon = '📊';
-demoSheet.isFavorite = true;
-const sh = demoSheet.sheets[0];
-const data: Record<string, { v: string; bold?: boolean; fill?: string }> = {
-  '0:0': { v: 'Urun', bold: true, fill: '#F1F5F9' },
-  '0:1': { v: 'Kategori', bold: true, fill: '#F1F5F9' },
-  '0:2': { v: 'Stok', bold: true, fill: '#F1F5F9' },
-  '0:3': { v: 'Fiyat', bold: true, fill: '#F1F5F9' },
-  '1:0': { v: 'MacBook Air' }, '1:1': { v: 'Elektronik' }, '1:2': { v: '24' }, '1:3': { v: '42.999' },
-  '2:0': { v: 'iPad Pro' }, '2:1': { v: 'Elektronik' }, '2:2': { v: '18' }, '2:3': { v: '34.499' },
-  '3:0': { v: 'AirPods Pro' }, '3:1': { v: 'Aksesuar' }, '3:2': { v: '156' }, '3:3': { v: '7.999' },
-};
-for (const [k, d] of Object.entries(data)) {
-  sh.cells[k] = { value: d.v, format: d.bold ? { bold: true, fillColor: d.fill } : undefined };
-}
-
-// Ek demo dosyalar
-const demoSheet2 = createSpreadsheet('Musteri Listesi');
-demoSheet2.icon = '📋';
-const sh2 = demoSheet2.sheets[0];
-const data2: Record<string, { v: string; bold?: boolean; fill?: string }> = {
-  '0:0': { v: 'Musteri', bold: true, fill: '#F1F5F9' }, '0:1': { v: 'Telefon', bold: true, fill: '#F1F5F9' }, '0:2': { v: 'Sehir', bold: true, fill: '#F1F5F9' },
-  '1:0': { v: 'Ali Veli' }, '1:1': { v: '0532 111 22 33' }, '1:2': { v: 'Istanbul' },
-  '2:0': { v: 'Zeynep Ak' }, '2:1': { v: '0544 222 33 44' }, '2:2': { v: 'Ankara' },
-};
-for (const [k, d] of Object.entries(data2)) {
-  sh2.cells[k] = { value: d.v, format: d.bold ? { bold: true, fillColor: d.fill } : undefined };
-}
-
-const demoSheet3 = createSpreadsheet('Gelir-Gider Takibi');
-demoSheet3.icon = '💰';
-const sh3 = demoSheet3.sheets[0];
-const data3: Record<string, { v: string; bold?: boolean; fill?: string }> = {
-  '0:0': { v: 'Tarih', bold: true, fill: '#F1F5F9' }, '0:1': { v: 'Aciklama', bold: true, fill: '#F1F5F9' }, '0:2': { v: 'Tutar', bold: true, fill: '#F1F5F9' },
-  '1:0': { v: '01.03.2026' }, '1:1': { v: 'Kira odemesi' }, '1:2': { v: '-12.500' },
-  '2:0': { v: '05.03.2026' }, '2:1': { v: 'Musteri odemesi' }, '2:2': { v: '+45.000' },
-};
-for (const [k, d] of Object.entries(data3)) {
-  sh3.cells[k] = { value: d.v, format: d.bold ? { bold: true, fillColor: d.fill } : undefined };
-}
-
-const demoNote2 = createNote('Toplanti Notlari - 24 Mart');
-demoNote2.icon = '📋';
-demoNote2.isFavorite = true;
-demoNote2.blocks = [
-  createBlock('heading1', 'Haftalik Toplanti'),
-  createBlock('text', 'Bugunku toplantida sunlar konusuldu:'),
-  createBlock('bulletList', 'Istanbul teslimati 27 Nisana alindi'),
-  createBlock('bulletList', 'Yeni sofor: Mehmet Yildiz'),
-  createBlock('checklist', 'Fatura sistemi guncellenmeli', { checked: false }),
-];
-
-const demoNote3 = createNote('Operasyon Plani');
-demoNote3.icon = '📑';
-demoNote3.blocks = [
-  createBlock('heading1', 'Operasyon Plani'),
-  createBlock('text', 'Haftalik teslimat rotalari belirlendi'),
-  createBlock('checklist', 'Rota optimizasyonu', { checked: true }),
-  createBlock('checklist', 'Arac bakim takvimi', { checked: false }),
-];
-
-const demoNote4 = createNote('Yeni Sofor Oryantasyon');
-demoNote4.icon = '📄';
-demoNote4.blocks = [
-  createBlock('heading1', 'Oryantasyon Rehberi'),
-  createBlock('text', 'Mehmet Yildiz - 26 Nisan basliyor'),
-  createBlock('bulletList', 'Arac teslim proseduru'),
-  createBlock('bulletList', 'Guvenlik egitimi'),
-];
-
-// Demo ekip
-const ME: TeamMember = { id: 'me', username: 'fampa', name: 'Fampa', role: 'Yonetici', avatar: '#007AFF', isOnline: true };
-const demoMembers: TeamMember[] = [
-  ME,
-  { id: 'driver1', username: 'ahmetkaya', name: 'Ahmet Kaya', role: 'Sofor', avatar: '#34C759', isOnline: true },
-  { id: 'member1', username: 'aysedemir', name: 'Ayse Demir', role: 'Muhasebe', avatar: '#FF9500', isOnline: false },
-];
-
-// Demo ekipler
-const demoTeams: Team[] = [
-  { id: 'team-is', name: 'Is Ekibi', memberIds: ['me', 'driver1', 'member1'], createdAt: new Date().toISOString() },
-  { id: 'team-gundelik', name: 'Gundelik', memberIds: ['me'], createdAt: new Date().toISOString() },
-];
-
-// Demo görevler
-const demoTasks: Task[] = [
-  { ...createTask('İstanbul deposundan malzeme al', 'driver1', 'me', 'high'), status: 'in_progress' },
-  { ...createTask('Fatura ödemelerini kontrol et', 'member1', 'me', 'medium') },
-  { ...createTask('Haftalık rapor hazırla', 'me', 'me', 'medium'), status: 'in_progress' },
-  { ...createTask('Müşteri toplantısı notlarını gönder', 'me', 'me', 'low'), status: 'completed' },
-];
+// ── Varsayılan kullanıcı (login sonrası güncellenecek) ──
+const ME: TeamMember = { id: 'me', username: '', name: '', role: '', avatar: '#007AFF', isOnline: true };
 
 // ── Store ──
 interface AppState {
@@ -222,15 +114,15 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   currentUser: ME,
 
-  allMembers: demoMembers,
+  allMembers: [ME],
   addMember: (m) => set(s => ({ allMembers: [...s.allMembers, m] })),
   removeMember: (id) => set(s => ({
     allMembers: s.allMembers.filter(m => m.id !== id),
     teams: s.teams.map(t => ({ ...t, memberIds: t.memberIds.filter(mid => mid !== id) })),
   })),
 
-  teams: demoTeams,
-  activeTeamId: 'team-is',
+  teams: [],
+  activeTeamId: '',
   createTeam: (name) => {
     const t: Team = { id: uid(), name, memberIds: [get().currentUser.id], createdAt: new Date().toISOString() };
     set(s => ({ teams: [...s.teams, t], activeTeamId: t.id }));
@@ -269,21 +161,17 @@ export const useAppStore = create<AppState>((set, get) => ({
     s.removeMemberFromTeam(s.activeTeamId, id);
   },
 
-  tasks: demoTasks,
+  tasks: [],
   addTask: (t) => set(s => ({ tasks: [t, ...s.tasks] })),
   updateTask: (id, updates) => set(s => ({ tasks: s.tasks.map(t => t.id === id ? { ...t, ...updates } : t) })),
   deleteTask: (id) => set(s => ({ tasks: s.tasks.filter(t => t.id !== id) })),
 
-  calendarEvents: [
-    { id: 'ce1', title: 'Istanbul teslimati', date: '2026-03-27', note: 'Depodan malzeme alinacak, Ahmet sofor', color: '#2563EB', createdAt: new Date().toISOString() },
-    { id: 'ce2', title: 'Musteri toplantisi', date: '2026-03-28', note: '', color: '#10B981', createdAt: new Date().toISOString() },
-    { id: 'ce3', title: 'Fatura son odeme', date: '2026-03-31', note: 'Elektrik + su faturalari', color: '#EF4444', createdAt: new Date().toISOString() },
-  ],
+  calendarEvents: [],
   addCalendarEvent: (e) => set(s => ({ calendarEvents: [...s.calendarEvents, e] })),
   updateCalendarEvent: (id, updates) => set(s => ({ calendarEvents: s.calendarEvents.map(e => e.id === id ? { ...e, ...updates } : e) })),
   deleteCalendarEvent: (id) => set(s => ({ calendarEvents: s.calendarEvents.filter(e => e.id !== id) })),
 
-  files: [demoSheet, demoNote2, demoSheet3, demoNote, demoSheet2, demoNote3, demoNote4],
+  files: [],
   activeFileId: null,
 
   focusedBlockId: null,
