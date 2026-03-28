@@ -1,4 +1,4 @@
-import { Sparkles, ArrowRight, Shield, Zap, Users, CheckCircle2, Lock, Table, BarChart3 } from 'lucide-react';
+import { Sparkles, ArrowRight, Shield, Zap, Users, CheckCircle2, Lock, Table, BarChart3, Building2 } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 
 export default function SplashPage() {
@@ -14,6 +14,7 @@ export default function SplashPage() {
             <Sparkles size={14} className="text-white" />
           </div>
           <span className="text-[15px] font-bold text-[#0F172A] tracking-tight">NotApp</span>
+          <span className="text-[10px] font-bold text-[#06B6D4] bg-[#ECFEFF] px-2 py-0.5 rounded-full border border-[#A5F3FC]">FAMPA</span>
         </div>
       </nav>
 
@@ -24,17 +25,17 @@ export default function SplashPage() {
           <div className="max-w-[540px] text-center flex flex-col items-center">
             {/* Badge */}
             <div className="anim-fade-up inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#ECFEFF] border border-[#A5F3FC] mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#06B6D4] animate-pulse" />
-              <span className="text-[11px] font-semibold text-[#0E7490] tracking-wide">Yeni surum — v1.2.2</span>
+              <Building2 size={12} className="text-[#0E7490]" />
+              <span className="text-[11px] font-semibold text-[#0E7490] tracking-wide">FAMPA Kurumsal Çalışma Alanı</span>
             </div>
 
             <h1 className="anim-fade-up-d1 text-[48px] font-extrabold text-[#0F172A] leading-[1.06] tracking-[-0.03em] mb-5">
-              Belgelerinizi<br />
-              <span className="shimmer-cyan">tek platformda</span> yönetin.
+              Hoş geldiniz,<br />
+              <span className="shimmer-cyan">FAMPA</span> Ekibi
             </h1>
 
             <p className="anim-fade-up-d2 text-[16px] text-[#64748B] leading-[1.75] mb-8 max-w-[440px]">
-              Notlar, tablolar, dokümanlar ve sunumlar — tüm ekibinizin ihtiyacı olan araçlar güvenli ve hızlı bir şekilde tek çatı altında.
+              Notlarınız, tablolarınız ve belgeleriniz güvenle tek çatıda. FAMPA ekibine özel çalışma platformunuz hazır.
             </p>
 
             {/* CTA */}
@@ -46,16 +47,16 @@ export default function SplashPage() {
               </button>
             </div>
 
-            {/* Güven satırı */}
+            {/* Guven satiri */}
             <div className="anim-fade-up-d4 flex items-center gap-6">
               <Trust icon={Shield} text="Güvenli altyapı" />
               <Trust icon={Zap} text="Hızlı ve kararlı" />
-              <Trust icon={Users} text="Ekip çalışmasına uygun" />
+              <Trust icon={Users} text="Ekip çalışması" />
             </div>
           </div>
         </div>
 
-        {/* Sağ — Dark teal panel with floating UI */}
+        {/* Sag — Dark teal panel with floating UI */}
         <div className="hidden lg:flex w-[48%] items-center justify-center relative overflow-hidden rounded-tl-[40px]"
           style={{ background: 'linear-gradient(160deg, #0F2027 0%, #203A43 45%, #2C5364 100%)' }}>
 
@@ -79,7 +80,7 @@ export default function SplashPage() {
                 <span className="w-2.5 h-2.5 rounded-full bg-[#F59E0B]/80" />
                 <span className="w-2.5 h-2.5 rounded-full bg-[#22C55E]/80" />
               </div>
-              <span className="text-[11px] text-[#94A3B8] ml-2">Proje Notları.note</span>
+              <span className="text-[11px] text-[#94A3B8] ml-2">FAMPA — Proje Notları</span>
             </div>
             <div className="p-4 space-y-2.5">
               <div className="h-2.5 bg-white/20 rounded w-[70%]" />
@@ -87,8 +88,8 @@ export default function SplashPage() {
               <div className="h-2 bg-white/8 rounded w-[85%]" />
               <div className="h-2 bg-white/5 rounded w-[60%]" />
               <div className="mt-3 flex gap-2">
-                <span className="px-2 py-0.5 bg-[#06B6D4]/15 text-[#67E8F9] text-[9px] font-medium rounded">Tasarım</span>
-                <span className="px-2 py-0.5 bg-[#22C55E]/15 text-[#4ADE80] text-[9px] font-medium rounded">Sprint 4</span>
+                <span className="px-2 py-0.5 bg-[#06B6D4]/15 text-[#67E8F9] text-[9px] font-medium rounded">FAMPA</span>
+                <span className="px-2 py-0.5 bg-[#22C55E]/15 text-[#4ADE80] text-[9px] font-medium rounded">2026 Q1</span>
               </div>
             </div>
           </div>
@@ -98,16 +99,16 @@ export default function SplashPage() {
             style={{ background: 'linear-gradient(180deg, #1a3a4a 0%, #162d3a 100%)' }}>
             <div className="flex items-center gap-1.5 px-3 py-2 border-b border-white/[0.06] bg-white/[0.03]">
               <Table size={11} className="text-[#06B6D4]" />
-              <span className="text-[10px] text-[#94A3B8] font-medium">Bütçe Tablosu</span>
+              <span className="text-[10px] text-[#94A3B8] font-medium">FAMPA Bütçe 2026</span>
             </div>
             <div className="p-2.5 space-y-1.5">
               <div className="flex gap-1.5">
-                <div className="h-5 flex-1 bg-[#06B6D4]/10 rounded text-[8px] text-[#67E8F9] flex items-center justify-center font-mono">12,450</div>
-                <div className="h-5 flex-1 bg-[#22C55E]/10 rounded text-[8px] text-[#4ADE80] flex items-center justify-center font-mono">8,200</div>
+                <div className="h-5 flex-1 bg-[#06B6D4]/10 rounded text-[8px] text-[#67E8F9] flex items-center justify-center font-mono">142,500</div>
+                <div className="h-5 flex-1 bg-[#22C55E]/10 rounded text-[8px] text-[#4ADE80] flex items-center justify-center font-mono">98,200</div>
               </div>
               <div className="flex gap-1.5">
-                <div className="h-5 flex-1 bg-white/5 rounded text-[8px] text-[#94A3B8] flex items-center justify-center font-mono">5,780</div>
-                <div className="h-5 flex-1 bg-white/5 rounded text-[8px] text-[#94A3B8] flex items-center justify-center font-mono">3,100</div>
+                <div className="h-5 flex-1 bg-white/5 rounded text-[8px] text-[#94A3B8] flex items-center justify-center font-mono">57,800</div>
+                <div className="h-5 flex-1 bg-white/5 rounded text-[8px] text-[#94A3B8] flex items-center justify-center font-mono">31,000</div>
               </div>
             </div>
           </div>
@@ -117,7 +118,7 @@ export default function SplashPage() {
             style={{ background: 'linear-gradient(180deg, #1a3a4a 0%, #162d3a 100%)' }}>
             <div className="flex items-center gap-1.5 px-3 py-2 border-b border-white/[0.06] bg-white/[0.03]">
               <BarChart3 size={11} className="text-[#06B6D4]" />
-              <span className="text-[10px] text-[#94A3B8] font-medium">Analiz</span>
+              <span className="text-[10px] text-[#94A3B8] font-medium">Performans</span>
             </div>
             <div className="p-3 flex items-end gap-1.5 h-[60px]">
               {[40, 65, 45, 80, 55, 90, 70].map((h, i) => (
@@ -144,11 +145,11 @@ export default function SplashPage() {
           <div className="anim-scale-in-d2 absolute top-[8%] left-[35%] z-20 flex items-center gap-1.5 px-3 py-2 rounded-lg shadow-lg shadow-black/15 border border-white/[0.08] anim-float"
             style={{ background: 'linear-gradient(180deg, #1a3a4a 0%, #162d3a 100%)' }}>
             <div className="flex -space-x-1.5">
-              <div className="w-5 h-5 rounded-full bg-[#06B6D4] flex items-center justify-center text-[7px] font-bold text-white ring-1 ring-[#162d3a]">AY</div>
-              <div className="w-5 h-5 rounded-full bg-[#F59E0B] flex items-center justify-center text-[7px] font-bold text-white ring-1 ring-[#162d3a]">MK</div>
-              <div className="w-5 h-5 rounded-full bg-[#22C55E] flex items-center justify-center text-[7px] font-bold text-white ring-1 ring-[#162d3a]">EO</div>
+              <div className="w-5 h-5 rounded-full bg-[#06B6D4] flex items-center justify-center text-[7px] font-bold text-white ring-1 ring-[#162d3a]">IY</div>
+              <div className="w-5 h-5 rounded-full bg-[#F59E0B] flex items-center justify-center text-[7px] font-bold text-white ring-1 ring-[#162d3a]">FK</div>
+              <div className="w-5 h-5 rounded-full bg-[#22C55E] flex items-center justify-center text-[7px] font-bold text-white ring-1 ring-[#162d3a]">AD</div>
             </div>
-            <span className="text-[10px] font-medium text-[#CBD5E1]">3 aktif</span>
+            <span className="text-[10px] font-medium text-[#CBD5E1]">FAMPA Ekibi</span>
             <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse" />
           </div>
         </div>
@@ -156,7 +157,7 @@ export default function SplashPage() {
 
       {/* Footer */}
       <div className="flex items-center justify-between px-10 h-[44px] text-[11px] text-[#94A3B8] shrink-0">
-        <span>© 2026 NotApp. Tum haklari saklidir. — v1.2.2</span>
+        <span>&copy; 2026 FAMPA &middot; NotApp ile güçlendirilmiştir</span>
         <div className="flex gap-4">
           <span className="hover:text-[#64748B] cursor-pointer transition-colors">Gizlilik</span>
           <span className="hover:text-[#64748B] cursor-pointer transition-colors">Kullanım Şartları</span>
